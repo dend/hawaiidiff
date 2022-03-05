@@ -15,7 +15,7 @@ function dateDiffInDays(a, b) {
 const dayString = "DAY_COUNTER_VAR"
 const fileName = "./_index.html"
 var raw_data = fs.readFileSync(require.resolve(fileName), "utf8").toString()
-raw_data = raw_data.replace(dayString, dateDiffInDays(new Date(), new Date("2022-09-01")))
+raw_data = raw_data.replace(dayString, dateDiffInDays(new Date(), new Date("2022-09-12")))
 
 const handler = async event => {
   return {
