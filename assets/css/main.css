@@ -248,12 +248,15 @@ a {
 .footer-text {
   font-size: 14px;
   color: var(--text-secondary);
-  margin-bottom: 8px;
+  margin: 0 0 8px 0;
+}
+
+.footer-text:last-child {
+  margin-bottom: 0;
 }
 
 .footer-attribution {
   font-size: 14px;
-  margin-top: 8px;
 }
 
 .footer-link {
