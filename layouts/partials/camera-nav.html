@@ -1,0 +1,68 @@
+{{/* 
+  Camera Navigation Partial
+  Provides previous/next navigation and position indicator for detail pages
+*/}}
+
+{{/* Get current camera ID from page */}}
+{{ $currentId := path.Base .RelPermalink }}
+
+{{/* Load all cameras */}}
+{{ $cameras := slice }}
+{{ with $.Site.Data.cameras }}
+  {{ with .cameras }}
+    {{ $cameras = sort . "id" }}
+  {{ end }}
+{{ end }}
+
+{{/* Find current camera index */}}
+{{ $currentIndex := 0 }}
+{{ $prevCamera := dict }}
+{{ $nextCamera := dict }}
+{{ $totalCameras := len $cameras }}
+
+{{ range $index, $camera := $cameras }}
+  {{ if eq $camera.id $currentId }}
+    {{ $currentIndex = $index }}
+    
+    {{/* Get previous camera (wrap around to last if at start) */}}
+    {{ if gt $index 0 }}
+      {{ $prevCamera = index $cameras (sub $index 1) }}
+    {{ else }}
+      {{ $prevCamera = index $cameras (sub $totalCameras 1) }}
+    {{ end }}
+    
+    {{/* Get next camera (wrap around to first if at end) */}}
+    {{ if lt $index (sub $totalCameras 1) }}
+      {{ $nextCamera = index $cameras (add $index 1) }}
+    {{ else }}
+      {{ $nextCamera = index $cameras 0 }}
+    {{ end }}
+  {{ end }}
+{{ end }}
+
+{{/* Navigation UI */}}
+<nav class="camera-navigation" aria-label="Camera navigation">
+  <a href="/cameras/{{ $prevCamera.id }}/" 
+     class="nav-button nav-prev" 
+     aria-label="Previous camera: {{ $prevCamera.name }}"
+     title="{{ $prevCamera.name }}">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span>Previous</span>
+  </a>
+  
+  <div class="camera-position">
+    <span class="position-text">Camera {{ add $currentIndex 1 }} of {{ $totalCameras }}</span>
+  </div>
+  
+  <a href="/cameras/{{ $nextCamera.id }}/" 
+     class="nav-button nav-next" 
+     aria-label="Next camera: {{ $nextCamera.name }}"
+     title="{{ $nextCamera.name }}">
+    <span>Next</span>
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+</nav>

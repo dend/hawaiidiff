@@ -1,0 +1,6 @@
+baseURL = '/'
+languageCode = 'en-us'
+title = 'Mauna Kea Camera Snapshots'
+
+[permalinks]
+  cameras = '/cameras/:slug/'

@@ -1,0 +1,3 @@
+---
+title: "subaru-all-sky"
+---

@@ -1,0 +1,151 @@
+{{ partial "head.html" . }}
+<body>
+    {{ partial "header.html" . }}
+    
+    {{/* Get camera data from JSON */}}
+    {{ $cameraId := path.Base .RelPermalink }}
+    {{ $cameraData := dict }}
+    {{ range $.Site.Data.cameras.cameras }}
+        {{ if eq .id $cameraId }}
+            {{ $cameraData = . }}
+        {{ end }}
+    {{ end }}
+    
+    {{/* Get navigation data */}}
+    {{ $cameras := slice }}
+    {{ with $.Site.Data.cameras }}
+      {{ with .cameras }}
+        {{ $cameras = sort . "id" }}
+      {{ end }}
+    {{ end }}
+    
+    {{ $currentIndex := 0 }}
+    {{ $prevCamera := dict }}
+    {{ $nextCamera := dict }}
+    {{ $totalCameras := len $cameras }}
+    
+    {{ range $index, $camera := $cameras }}
+      {{ if eq $camera.id $cameraId }}
+        {{ $currentIndex = $index }}
+        
+        {{ if gt $index 0 }}
+          {{ $prevCamera = index $cameras (sub $index 1) }}
+        {{ else }}
+          {{ $prevCamera = index $cameras (sub $totalCameras 1) }}
+        {{ end }}
+        
+        {{ if lt $index (sub $totalCameras 1) }}
+          {{ $nextCamera = index $cameras (add $index 1) }}
+        {{ else }}
+          {{ $nextCamera = index $cameras 0 }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+    
+    {{/* Find latest snapshot - needed for header timestamp */}}
+    {{ $imageDir := printf "static/images/%s" $cameraId }}
+    {{ $latestSnapshot := "" }}
+    {{ $latestFilename := "" }}
+    {{ $historicalSnapshots := slice }}
+    
+    {{ with os.ReadDir $imageDir }}
+        {{ $files := sort . "Name" "desc" }}
+        {{ $count := 0 }}
+        {{ range $files }}
+            {{ if not .IsDir }}
+                {{ if strings.HasSuffix .Name ".webp" }}
+                    {{ if eq $latestSnapshot "" }}
+                        {{ $latestSnapshot = printf "%s/%s" $imageDir .Name }}
+                        {{ $latestFilename = .Name }}
+                    {{ else if lt $count 10 }}
+                        {{ $historicalSnapshots = $historicalSnapshots | append . }}
+                        {{ $count = add $count 1 }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+        {{ end }}
+    {{ end }}
+    
+    {{/* Sticky header with metadata and navigation */}}
+    <header class="camera-detail-header">
+        <div class="header-content">
+            <div class="header-metadata">
+                <div class="camera-title-row">
+                    <h1 class="camera-name">{{ $cameraData.name }}</h1>
+                    {{ if $cameraData.direction }}
+                        <span class="direction-pill">
+                            <svg class="direction-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L15.5 8.5L22 12L15.5 15.5L12 22L8.5 15.5L2 12L8.5 8.5L12 2Z" fill="currentColor" opacity="0.8"/>
+                            </svg>
+                            {{ $cameraData.direction }}
+                        </span>
+                    {{ end }}
+                </div>
+                <p class="camera-timestamp-header" data-timestamp="{{ $latestFilename }}">{{ if $latestFilename }}Loading...{{ else }}<span class="unavailable">No timestamp available</span>{{ end }}</p>
+            </div>
+            <nav class="camera-navigation-inline" aria-label="Camera navigation">
+                <a href="/cameras/{{ $prevCamera.id }}/" 
+                   class="nav-button-inline nav-prev" 
+                   aria-label="Previous camera: {{ $prevCamera.name }}"
+                   title="{{ $prevCamera.name }}">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+                
+                <span class="camera-position-inline">{{ add $currentIndex 1 }} / {{ $totalCameras }}</span>
+                
+                <a href="/cameras/{{ $nextCamera.id }}/" 
+                   class="nav-button-inline nav-next" 
+                   aria-label="Next camera: {{ $nextCamera.name }}"
+                   title="{{ $nextCamera.name }}">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="camera-detail-main">
+        {{/* Latest snapshot display */}}
+        <section class="latest-snapshot-section">
+            {{ if $latestSnapshot }}
+                <img src="/images/{{ $cameraId }}/{{ $latestFilename }}" alt="{{ $cameraData.name }} - Latest Snapshot" class="camera-detail-image">
+            {{ else }}
+                <div class="image-placeholder-large">
+                    <svg class="icon-camera-off" width="96" height="96" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 9C13.66 9 15 10.34 15 12C15 13.66 13.66 15 12 15C10.34 15 9 13.66 9 12C9 10.34 10.34 9 12 9ZM12 7C9.24 7 7 9.24 7 12C7 14.76 9.24 17 12 17C14.76 17 17 14.76 17 12C17 9.24 14.76 7 12 7ZM12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z" fill="#808080"/>
+                    </svg>
+                    <p class="unavailable" style="font-size: 20px;">Image unavailable</p>
+                </div>
+            {{ end }}
+        </section>
+        
+        {{/* Historical snapshots */}}
+        <section class="snapshot-history-section">
+            <h2 class="section-title">Previous Snapshots</h2>
+            {{ if gt (len $historicalSnapshots) 0 }}
+                <div class="snapshot-history">
+                    {{ range $historicalSnapshots }}
+                        <div class="snapshot-thumbnail-wrapper">
+                            <img src="/images/{{ $cameraId }}/{{ .Name }}" 
+                                 alt="Snapshot from {{ .Name }}" 
+                                 class="snapshot-thumbnail">
+                            <p class="snapshot-timestamp" data-timestamp="{{ .Name }}">Loading...</p>
+                        </div>
+                    {{ end }}
+                </div>
+            {{ else }}
+                <p class="no-snapshots">No previous snapshots available</p>
+            {{ end }}
+        </section>
+    </main>
+    
+    {{ partial "footer.html" . }}
+    
+    {{/* Include JavaScript */}}
+    {{ $js := resources.Get "js/main.js" | minify }}
+    <script src="{{ $js.RelPermalink }}"></script>
+</body>
+</html>

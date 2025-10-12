@@ -1,0 +1,18 @@
+{{/* 
+  Camera Data Access Helper
+  Loads cameras from data/cameras.json and provides sorted list
+*/}}
+
+{{/* Load camera data from JSON file */}}
+{{ $cameras := slice }}
+{{ with $.Site.Data.cameras }}
+  {{ with .cameras }}
+    {{ $cameras = . }}
+  {{ end }}
+{{ end }}
+
+{{/* Sort cameras by ID for consistent ordering */}}
+{{ $cameras = sort $cameras "id" }}
+
+{{/* Return sorted cameras */}}
+{{ return $cameras }}

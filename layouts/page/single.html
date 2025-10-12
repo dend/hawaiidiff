@@ -1,0 +1,20 @@
+{{ partial "head.html" . }}
+<body>
+    {{ partial "header.html" . }}
+    
+    <main class="container">
+        <article class="page-content">
+            <h1 class="page-title">{{ .Title }}</h1>
+            <div class="page-body">
+                {{ .Content }}
+            </div>
+        </article>
+    </main>
+    
+    {{ partial "footer.html" . }}
+    
+    {{/* Include JavaScript */}}
+    {{ $js := resources.Get "js/main.js" | minify }}
+    <script src="{{ $js.RelPermalink }}"></script>
+</body>
+</html>
