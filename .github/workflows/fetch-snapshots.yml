@@ -9,6 +9,8 @@ on:
 jobs:
   fetch-snapshots:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     
     steps:
       - name: Checkout repository
