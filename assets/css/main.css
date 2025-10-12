@@ -145,6 +145,69 @@ main {
   width: 100%;
 }
 
+/* Page Content (About, etc.) */
+.page-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.page-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 32px;
+}
+
+.page-body {
+  color: var(--text-primary);
+  line-height: 1.8;
+}
+
+.page-body h1 {
+  font-size: 32px;
+  font-weight: 700;
+  margin-top: 48px;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+.page-body h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 40px;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.page-body p {
+  margin-bottom: 16px;
+}
+
+.page-body ul {
+  margin-bottom: 16px;
+  padding-left: 24px;
+}
+
+.page-body li {
+  margin-bottom: 8px;
+}
+
+.page-body a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-decoration-color: rgba(74, 158, 255, 0.3);
+  transition: text-decoration-color 200ms ease-out;
+}
+
+.page-body a:hover {
+  text-decoration-color: var(--accent);
+}
+
+.page-body strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
 .site-title {
   font-size: 32px;
   font-weight: 700;
