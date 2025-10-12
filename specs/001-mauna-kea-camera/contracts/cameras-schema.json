@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://hawaiidiff.com/schemas/cameras.json",
+  "title": "Camera Configuration",
+  "description": "Schema for camera configuration file used by snapshot collector and Hugo site generator",
+  "type": "object",
+  "required": ["cameras"],
+  "properties": {
+    "cameras": {
+      "description": "Array of camera objects representing physical cameras on Mauna Kea",
+      "type": "array",
+      "minItems": 34,
+      "maxItems": 34,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "uri"],
+        "properties": {
+          "id": {
+            "description": "Unique identifier for the camera, used in URLs and directory names",
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$",
+            "minLength": 1,
+            "maxLength": 50,
+            "examples": [
+              "camera-001",
+              "summit-north",
+              "subaru-east"
+            ]
+          },
+          "name": {
+            "description": "Human-readable display name for the camera",
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100,
+            "examples": [
+              "Summit North",
+              "Subaru Telescope East",
+              "Keck Observatory West"
+            ]
+          },
+          "direction": {
+            "description": "Compass direction or orientation of the camera view (optional)",
+            "type": "string",
+            "maxLength": 20,
+            "examples": [
+              "N",
+              "NE",
+              "E",
+              "SE",
+              "S",
+              "SW",
+              "W",
+              "NW",
+              "Up",
+              "Down",
+              "Northeast",
+              "Overhead"
+            ]
+          },
+          "uri": {
+            "description": "Source URL for fetching the camera snapshot image",
+            "type": "string",
+            "format": "uri",
+            "pattern": "^https?://",
+            "examples": [
+              "https://example.com/cameras/summit-north/snapshot.jpg",
+              "http://camera-server.local/cam01/current.jpg"
+            ]
+          },
+          "description": {
+            "description": "Optional text description of the camera location or view (optional)",
+            "type": "string",
+            "maxLength": 500,
+            "examples": [
+              "North-facing view from the summit of Mauna Kea",
+              "Wide-angle view of the Subaru Telescope complex"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "uniqueItems": true
+    }
+  },
+  "additionalProperties": false
+}
