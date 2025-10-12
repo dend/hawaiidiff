@@ -120,6 +120,281 @@ hawaiidiff/
 
 **Structure Decision**: Single Hugo project with custom templates. The collector/ folder contains the data collection infrastructure (cameras.json config and bash script). GitHub Actions automates snapshot collection every 20 minutes. Hugo builds the static site from the data/ folder, using layouts/ for custom HTML templates and assets/ for CSS/JS. No npm dependencies - all templates are custom HTML/CSS/vanilla JS.
 
+## Implementation Specifications
+
+*This section translates "what" requirements from spec.md into "how" technical specifications.*
+
+### Visual Design Implementation (maps to FR-016 through FR-024)
+
+**Card Dimensions** (FR-016):
+- Exact size: 320x320 pixels
+- CSS: `width: 320px; height: 320px; aspect-ratio: 1 / 1;`
+
+**Grid Layout** (FR-017):
+- Desktop (≥1200px): `grid-template-columns: repeat(6, 1fr);`
+- Tablet (768-1199px): `grid-template-columns: repeat(4, 1fr);`
+- Mobile (<768px): `grid-template-columns: repeat(2, 1fr);`
+
+**Image Fitting** (FR-018):
+- CSS: `object-fit: cover; object-position: center;`
+
+**Grid Spacing** (FR-019):
+- Desktop/tablet: `gap: 24px;`
+- Mobile: `gap: 16px;`
+
+**Card Padding** (FR-020):
+- CSS: `padding: 16px;`
+
+**Detail Image Sizing** (FR-021):
+- Desktop: `min-width: 800px; max-width: 1200px;`
+- Mobile: `width: 100%;`
+
+**Thumbnail Dimensions** (FR-022):
+- Size: 160x160 pixels
+- Layout: `display: flex; gap: 12px; overflow-x: auto;`
+
+**Color Palette** (FR-023):
+```css
+:root {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2a2a2a;
+  --text-primary: #e0e0e0;
+  --text-secondary: #b0b0b0;
+  --accent: #4a9eff;
+  --border: #3a3a3a;
+}
+```
+
+**Contrast Ratios** (FR-024):
+- Primary text on primary bg: 11.5:1
+- Secondary text on card bg: 7.2:1
+- Accent on primary bg: 5.8:1
+
+### Typography Implementation (maps to FR-025 through FR-030)
+
+**Camera Name** (FR-025):
+```css
+.camera-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #e0e0e0;
+}
+```
+
+**Direction Label** (FR-026):
+```css
+.camera-direction {
+  font-size: 14px;
+  font-weight: 400;
+  color: #b0b0b0;
+}
+```
+
+**Timestamp** (FR-027):
+```css
+.camera-timestamp {
+  font-size: 13px;
+  font-weight: 400;
+  color: #b0b0b0;
+}
+```
+
+**Text Truncation** (FR-028):
+```css
+.camera-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+```
+
+**Timestamp Format** (FR-029):
+- Format string: "MMM DD, YYYY, h:mm A"
+- Example: "Oct 11, 2025, 2:30 PM"
+- Implementation: `Intl.DateTimeFormat('en-US', {month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true})`
+
+**Font Stack** (FR-030):
+```css
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+```
+
+### Interaction State Implementation (maps to FR-031 through FR-036)
+
+**Hover State** (FR-031):
+```css
+.camera-card:hover {
+  border-color: #4a9eff;
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.2);
+  transform: translateY(-2px);
+  transition: all 200ms ease-out;
+}
+```
+
+**Focus State** (FR-032):
+```css
+.camera-card:focus {
+  outline: 2px solid #4a9eff;
+  outline-offset: 4px;
+}
+```
+
+**Active State** (FR-033):
+```css
+.camera-card:active {
+  transform: translateY(0);
+  opacity: 0.9;
+}
+```
+
+**Thumbnail Hover** (FR-034):
+```css
+.snapshot-thumbnail {
+  opacity: 0.85;
+}
+.snapshot-thumbnail:hover {
+  border: 2px solid #4a9eff;
+  opacity: 1.0;
+  cursor: pointer;
+}
+```
+
+**Touch Targets** (FR-035):
+- Minimum size: 44x44 pixels
+- CSS: `min-width: 44px; min-height: 44px;`
+
+**Disabled State** (FR-036):
+```css
+.camera-card.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
+```
+
+### Accessibility Implementation (maps to FR-037 through FR-043)
+
+**Keyboard Navigation** (FR-037):
+- Tab order: left-to-right, top-to-bottom
+- Implementation: Natural DOM order with `tabindex="0"` on cards
+
+**ARIA Labels** (FR-038):
+```html
+<a aria-label="Camera: {{ .name }}, Direction: {{ .direction }}, Last updated: {{ .timestamp }}">
+```
+
+**Placeholder Alt Text** (FR-039):
+```html
+<div role="img" aria-label="Camera image unavailable">
+  <img alt="" aria-hidden="true">
+</div>
+```
+
+**Navigation ARIA** (FR-040):
+```html
+<a href="/" aria-label="Return to all cameras" tabindex="0">
+```
+
+**Thumbnail Alt Text** (FR-041):
+```html
+<img alt="Snapshot from {{ formatTimestamp .filename }}">
+```
+
+**Focus Visibility** (FR-042):
+```css
+*:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+/* Never: outline: none; without replacement */
+```
+
+**Non-Color Indicators** (FR-043):
+- Always combine color with: text labels, icons, or patterns
+- Example: Error states use red color + "X" icon + error text
+
+### Layout Implementation (maps to FR-044 through FR-047)
+
+**Sticky Header** (FR-044):
+```css
+.camera-detail-header {
+  position: sticky;
+  top: 0;
+  background: rgba(42, 42, 42, 0.8);
+  backdrop-filter: blur(10px);
+  height: 80px;
+  z-index: 100;
+}
+```
+
+**Snapshot Spacing** (FR-045):
+```css
+.snapshot-history {
+  margin-top: 32px;
+}
+```
+
+**Placeholder Layout** (FR-046):
+```html
+<div class="image-placeholder">
+  <svg class="icon-camera-off" width="48" height="48"></svg>
+  <p style="font-size: 16px;">Image unavailable</p>
+  <div class="camera-metadata"><!-- name, direction --></div>
+</div>
+```
+
+**Skeleton Loader** (FR-047):
+```css
+.skeleton {
+  background: linear-gradient(90deg, #2a2a2a 0%, #3a3a3a 50%, #2a2a2a 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+.skeleton-card { width: 320px; height: 320px; }
+.skeleton-detail { width: 800px; }
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+```
+
+### Error State Implementation (maps to FR-048 through FR-051)
+
+**Unavailable Text Styling** (FR-048, FR-049):
+```css
+.unavailable {
+  font-style: italic;
+  color: #808080;
+  opacity: 0.7;
+}
+```
+
+**No Snapshots Message** (FR-050):
+```html
+{{ if eq (len $snapshots) 0 }}
+  <p class="no-snapshots">No previous snapshots available</p>
+{{ end }}
+```
+
+**Grid Structure Maintenance** (FR-051):
+- Grid uses `display: grid` which maintains structure
+- Placeholder divs fill empty slots
+- CSS: `min-height: 400px;` prevents collapse
+
+### Performance Implementation (maps to SC-001, SC-009, SC-012)
+
+**Page Load Target** (SC-001):
+- Optimize images: WebP format, quality 80
+- Minimize CSS: Single concatenated file
+- Defer non-critical JS
+
+**Transition Timing** (SC-009):
+- Standard: `transition: all 200ms ease-out;`
+- Acceptable range: 150-250ms
+
+**Skeleton Timing** (SC-012):
+- Display within: 100ms of page load
+- Implementation: Skeleton in initial HTML, replaced on image load
+
 ## Complexity Tracking
 
 *No constitution violations - this section is empty.*

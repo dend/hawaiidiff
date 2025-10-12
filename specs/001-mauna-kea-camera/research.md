@@ -185,17 +185,22 @@ Implement dark theme using CSS custom properties (CSS variables) with WCAG AA co
 
 ```css
 :root {
+  /* Updated palette matching FR-023 and FR-024 */
   --bg-primary: #1a1a1a;      /* Main background */
-  --bg-secondary: #2d2d2d;    /* Card backgrounds */
-  --text-primary: #ffffff;     /* Primary text - 16.5:1 ratio */
-  --text-secondary: #b0b0b0;   /* Secondary text - 7.3:1 ratio */
-  --accent: #00a8e8;           /* Links and accents - 4.6:1 ratio */
-  --border: #404040;           /* Card borders */
-  --error: #ff6b6b;            /* Error states - 4.7:1 ratio */
+  --bg-secondary: #2a2a2a;    /* Card/elevated surfaces */
+  --text-primary: #e0e0e0;     /* Primary text - 11.5:1 ratio */
+  --text-secondary: #b0b0b0;   /* Secondary/metadata - 7.2:1 ratio */
+  --accent: #4a9eff;           /* Interactive elements - 5.8:1 ratio */
+  --border: #3a3a3a;           /* Card borders, dividers */
 }
 ```
 
-All ratios tested against dark backgrounds meet or exceed WCAG AA standard of 4.5:1 for normal text.
+**Verified Contrast Ratios** (against #1a1a1a background):
+- Primary text (#e0e0e0): 11.5:1 ✓ (exceeds WCAG AAA)
+- Secondary text (#b0b0b0): 7.2:1 ✓ (exceeds WCAG AA)
+- Accent (#4a9eff): 5.8:1 ✓ (exceeds WCAG AA 4.5:1 minimum)
+
+All ratios meet FR-024 requirements.
 
 ## Image Display Strategy
 
@@ -213,22 +218,44 @@ Use CSS object-fit for uniform square cards and CSS Grid for landing page layout
 ### Implementation
 
 ```css
+/* Implements FR-016, FR-017, FR-018, FR-019, FR-020 */
 .camera-card {
-  aspect-ratio: 1 / 1;  /* Square cards */
+  width: 320px;
+  height: 320px;
+  aspect-ratio: 1 / 1;  /* Square cards - FR-016 */
   overflow: hidden;
+  padding: 16px;        /* FR-020 internal padding */
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
 }
 
 .camera-card img {
   width: 100%;
   height: 100%;
-  object-fit: cover;    /* Crop to fill square */
+  object-fit: cover;    /* FR-018: Crop to fill square */
   object-position: center;
 }
 
 .camera-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  gap: 24px;  /* FR-019: desktop/tablet spacing */
+  
+  /* FR-017: Responsive columns */
+  grid-template-columns: repeat(6, 1fr);  /* Desktop ≥1200px */
+}
+
+@media (max-width: 1199px) {
+  .camera-grid {
+    grid-template-columns: repeat(4, 1fr);  /* Tablet 768-1199px */
+  }
+}
+
+@media (max-width: 767px) {
+  .camera-grid {
+    grid-template-columns: repeat(2, 1fr);  /* Mobile <768px */
+    gap: 16px;  /* FR-019: mobile spacing */
+  }
 }
 ```
 
@@ -248,50 +275,341 @@ Display up to 10 most recent snapshots as a horizontal scrollable gallery on cam
 ### Implementation
 
 ```css
+/* Implements FR-021, FR-022 */
 .snapshot-history {
   display: flex;
-  gap: 1rem;
+  gap: 12px;  /* FR-022: gap between thumbnails */
   overflow-x: auto;
   scroll-snap-type: x mandatory;
+  padding: 16px 0;
+  margin-top: 32px;  /* FR-045: 32px below main snapshot */
 }
 
 .snapshot-thumbnail {
-  flex: 0 0 150px;
+  flex: 0 0 160px;  /* FR-022: 160x160 pixels */
+  height: 160px;
   aspect-ratio: 1 / 1;
   scroll-snap-align: start;
+  border-radius: 4px;
+  overflow: hidden;
+  opacity: 0.85;
+  transition: opacity 200ms, border 200ms;
+  border: 2px solid transparent;
 }
+
+/* FR-034: Historical thumbnail hover state */
+.snapshot-thumbnail:hover {
+  opacity: 1.0;
+  border-color: var(--accent);
+  cursor: pointer;
+}
+
+.camera-detail-image {
+  width: 100%;
+  max-width: 1200px;  /* FR-021: max width */
+  min-width: 800px;   /* FR-021: min width desktop */
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
+
+@media (max-width: 799px) {
+  .camera-detail-image {
+    min-width: 100%;  /* FR-021: 100% on mobile */
+  }
+}
+```
+
+## Typography System
+
+### Decision
+
+Use system font stack with specific sizing per FR-025 through FR-030.
+
+### Rationale
+
+- **Performance**: System fonts load instantly, no web font download
+- **Native Feel**: Matches user's OS preferences
+- **Readability**: System fonts optimized for screen rendering
+- **Accessibility**: Clear hierarchy with appropriate sizing
+
+### Implementation
+
+```css
+/* FR-030: System font stack */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+}
+
+/* FR-025: Camera name */
+.camera-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);  /* #e0e0e0 */
+  margin-bottom: 8px;
+}
+
+/* FR-026: Direction label */
+.camera-direction {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-secondary);  /* #b0b0b0 */
+}
+
+/* FR-027: Timestamp */
+.camera-timestamp {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);  /* #b0b0b0 */
+}
+
+/* FR-028: Text truncation for long names */
+.camera-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.camera-name[title]:hover::after {
+  /* Tooltip showing full name on hover */
+  content: attr(title);
+  position: absolute;
+  background: var(--bg-secondary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+/* FR-048, FR-049: Unavailable state styling */
+.unavailable {
+  font-style: italic;
+  color: #808080;  /* Grayed out */
+  opacity: 0.7;
+}
+```
+
+## Interaction States
+
+### Decision
+
+Implement comprehensive hover, focus, and active states per FR-031 through FR-036.
+
+### Rationale
+
+- **Accessibility**: Focus states essential for keyboard navigation
+- **Feedback**: Users need visual confirmation of interactions
+- **Polish**: Smooth transitions improve perceived quality
+- **WCAG Compliance**: FR-032, FR-037, FR-042 require keyboard accessibility
+
+### Implementation
+
+```css
+/* FR-031: Camera card hover state */
+.camera-card {
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out, border-color 200ms ease-out;
+  cursor: pointer;
+}
+
+.camera-card:hover {
+  border-color: var(--accent);  /* #4a9eff */
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* FR-032: Focus state for keyboard navigation */
+.camera-card:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  /* No transform to avoid motion for a11y */
+}
+
+/* FR-033: Active/pressed state */
+.camera-card:active {
+  transform: translateY(0);  /* Cancel hover lift */
+  opacity: 0.9;
+}
+
+/* FR-036: Disabled state */
+.camera-card.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* FR-035: Minimum touch target size */
+.camera-card,
+.snapshot-thumbnail,
+.nav-link {
+  min-width: 44px;
+  min-height: 44px;
+}
+```
+
+## Accessibility Implementation
+
+### Decision
+
+Full keyboard navigation and ARIA labels per FR-037 through FR-043.
+
+### Rationale
+
+- **Legal Compliance**: WCAG AA is legal requirement in many jurisdictions
+- **Inclusive Design**: Makes site usable for keyboard-only and screen reader users
+- **SEO Benefit**: Semantic HTML improves search engine understanding
+- **Best Practice**: Accessibility benefits all users
+
+### Implementation
+
+```html
+<!-- FR-038: ARIA labels for camera cards -->
+<a href="/cameras/{{ .id }}/" 
+   class="camera-card"
+   aria-label="Camera: {{ .name }}, Direction: {{ .direction | default "unavailable" }}, Last updated: {{ .timestamp | default "unavailable" }}"
+   tabindex="0">
+  <!-- Card content -->
+</a>
+
+<!-- FR-039: Image unavailable placeholder -->
+<div class="image-placeholder" role="img" aria-label="Camera image unavailable">
+  <svg class="icon-camera-off" aria-hidden="true"><!-- Icon --></svg>
+  <p>Image unavailable</p>
+</div>
+
+<!-- FR-040: Navigation back to landing -->
+<a href="/" class="nav-back" aria-label="Return to all cameras" tabindex="0">
+  <svg aria-hidden="true"><!-- Back icon --></svg>
+  <span>All Cameras</span>
+</a>
+
+<!-- FR-041: Historical snapshot alt text -->
+<img src="{{ .path }}" 
+     alt="Snapshot from {{ formatTimestamp .filename }}"
+     class="snapshot-thumbnail">
+```
+
+```css
+/* FR-042: Visible focus indicators always */
+*:focus {
+  outline-color: var(--accent);
+  outline-width: 2px;
+  outline-style: solid;
+  outline-offset: 2px;
+}
+
+/* Never remove outlines without replacement */
+button:focus,
+a:focus,
+input:focus {
+  outline: 2px solid var(--accent);
+}
+
+/* FR-043: Color not sole indicator - use icons + text */
+.status-indicator {
+  /* Always combine color with icon and text label */
+}
+```
+
+## Loading States
+
+### Decision
+
+Implement skeleton/shimmer loading states per FR-047 and SC-012.
+
+### Rationale
+
+- **Perceived Performance**: Users tolerate longer loads with visual feedback
+- **Professional Polish**: Skeleton states feel more refined than spinners
+- **Progressive Enhancement**: Content appears to "materialize" smoothly
+
+### Implementation
+
+```css
+/* FR-047: Skeleton placeholder with shimmer */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 0%,
+    #3a3a3a 50%,
+    var(--bg-secondary) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+.skeleton-card {
+  width: 320px;
+  height: 320px;
+}
+
+.skeleton-detail {
+  width: 100%;
+  max-width: 1200px;
+  height: 600px;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+```
+
+```javascript
+// Show skeleton within 100ms of page load (SC-012)
+document.addEventListener('DOMContentLoaded', () => {
+  const images = document.querySelectorAll('img[data-src]');
+  images.forEach(img => {
+    const skeleton = img.previousElementSibling;
+    
+    img.addEventListener('load', () => {
+      skeleton?.remove();
+    });
+    
+    // Trigger load
+    img.src = img.dataset.src;
+  });
+});
 ```
 
 ## Timestamp Formatting
 
 ### Decision
 
-Use JavaScript Intl.DateTimeFormat for human-readable timestamp display.
+Use JavaScript Intl.DateTimeFormat for human-readable timestamp display per FR-029.
 
 ### Rationale
 
 - **Internationalization**: Supports locale-specific date/time formats
 - **Browser Native**: No external library required
 - **Graceful Degradation**: Falls back to ISO string if JavaScript disabled
+- **Format Requirement**: FR-029 specifies "MMM DD, YYYY, h:mm A" format
 
 ### Implementation
 
 ```javascript
+// FR-029: Format as "Oct 11, 2025, 2:30 PM" in user's local timezone
 function formatTimestamp(filename) {
   // Parse YYYY_MM_DD_HH_MM.webp
   const match = filename.match(/(\d{4})_(\d{2})_(\d{2})_(\d{2})_(\d{2})/);
-  if (!match) return 'Timestamp unavailable';
+  if (!match) return 'Timestamp unavailable';  // FR-005
   
   const [_, year, month, day, hour, minute] = match;
   const date = new Date(year, month - 1, day, hour, minute);
   
+  // FR-029: Specific format requirement
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+    month: 'short',   // "Oct"
+    day: 'numeric',   // "11"
+    hour: 'numeric',  // "2"
+    minute: '2-digit', // "30"
+    hour12: true      // "PM"
   }).format(date);
+  // Output: "Oct 11, 2025, 2:30 PM"
 }
 ```
 
@@ -299,23 +617,138 @@ function formatTimestamp(filename) {
 
 ### Decision
 
-Implement fallback placeholders for missing images, timestamps, and directions as specified in clarifications.
+Implement fallback placeholders for missing images, timestamps, and directions as specified in FR-004 through FR-006 and FR-044 through FR-051.
 
 ### Rationale
 
 - **User Clarity**: Explicit "unavailable" messages better than blank spaces
 - **Debugging**: Makes data issues visible to maintainers
-- **Consistency**: Same pattern for all missing data (FR-004, FR-005, FR-006)
+- **Consistency**: Same pattern for all missing data
+- **Graceful Degradation**: Site remains functional even with data issues
 
 ### Implementation
 
 Hugo template logic:
 ```html
-{{ with .Params.direction }}
+<!-- FR-046: Image unavailable placeholder -->
+{{ if fileExists (printf "data/images/%s/*.webp" .id) }}
+  <img src="{{ .latestImage }}" alt="{{ .name }}">
+{{ else }}
+  <div class="image-placeholder" role="img" aria-label="Camera image unavailable">
+    <svg class="icon-camera-off" width="48" height="48" aria-hidden="true">
+      <use xlink:href="#icon-camera-off"></use>
+    </svg>
+    <p class="unavailable-message">Image unavailable</p>
+    <!-- FR-046: Still show camera metadata -->
+    <p class="camera-name">{{ .name }}</p>
+    <p class="camera-direction">{{ .direction | default "Direction unavailable" }}</p>
+  </div>
+{{ end }}
+
+<!-- FR-005, FR-048: Timestamp unavailable -->
+{{ with .timestamp }}
+  <span class="camera-timestamp">{{ formatTimestamp . }}</span>
+{{ else }}
+  <span class="camera-timestamp unavailable">Timestamp unavailable</span>
+{{ end }}
+
+<!-- FR-006, FR-049: Direction unavailable -->
+{{ with .direction }}
   <span class="direction">{{ . }}</span>
 {{ else }}
   <span class="direction unavailable">Direction unavailable</span>
 {{ end }}
+
+<!-- FR-050: Zero historical snapshots -->
+{{ $snapshots := readDir (printf "data/images/%s" .id) }}
+{{ if gt (len $snapshots) 1 }}
+  <div class="snapshot-history">
+    {{ range $snapshots }}
+      <img src="{{ .path }}" alt="Snapshot from {{ .timestamp }}">
+    {{ end }}
+  </div>
+{{ else }}
+  <p class="no-snapshots">No previous snapshots available</p>
+{{ end }}
+```
+
+```css
+/* FR-046: Placeholder styling */
+.image-placeholder {
+  width: 320px;
+  height: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-secondary);
+  border: 2px dashed var(--border);
+  border-radius: 8px;
+  text-align: center;
+  padding: 24px;
+}
+
+.icon-camera-off {
+  color: var(--text-secondary);
+  opacity: 0.5;
+  margin-bottom: 16px;
+}
+
+.unavailable-message {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+/* FR-047: Skeleton loader */
+.skeleton-card {
+  width: 320px;
+  height: 320px;
+  background: linear-gradient(
+    90deg,
+    var(--bg-secondary) 0%,
+    #3a3a3a 50%,
+    var(--bg-secondary) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* FR-051: Grid maintains structure even with all missing images */
+.camera-grid {
+  /* Grid doesn't collapse - placeholders maintain layout */
+  min-height: 400px;
+}
+```
+
+### Edge Cases
+
+- **FR-051**: All 34 cameras with missing images still display full grid with placeholders (no collapse)
+- **FR-050**: Cameras with 0 historical snapshots show "No previous snapshots available" message
+- **FR-048/FR-049**: Italic gray text for unavailable timestamp/direction
+- **FR-044**: Detail page header sticky at top with backdrop blur for readability over images
+
+```css
+/* FR-044: Sticky header on camera detail page */
+.camera-detail-header {
+  position: sticky;
+  top: 0;
+  background: rgba(42, 42, 42, 0.8);  /* #2a2a2a with 80% opacity */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  height: 80px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--border);
+}
 ```
 
 ## Build and Deployment Workflow

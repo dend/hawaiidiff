@@ -99,6 +99,60 @@ While viewing a specific camera's detail page, a user can easily navigate to adj
 - **FR-014**: All camera data (names, directions, timestamps, image paths) MUST be stored in JSON format
 - **FR-015**: All text content MUST be stored in Markdown format where applicable
 
+### Visual Design Requirements
+
+- **FR-016**: Camera cards MUST display as uniform squares with identical dimensions regardless of source image aspect ratios
+- **FR-017**: Landing page grid MUST adapt to viewport size with different column counts for desktop, tablet, and mobile devices
+- **FR-018**: Camera card images MUST crop non-square source images to fill the square card area while preserving aspect ratio
+- **FR-019**: Camera cards MUST be visually separated with consistent spacing that adapts based on viewport size
+- **FR-020**: Camera cards MUST have sufficient internal spacing to prevent metadata text from touching card edges
+- **FR-021**: Camera detail page latest snapshot MUST display large enough to be prominently visible on desktop while scaling to full width on mobile devices
+- **FR-022**: Historical snapshot thumbnails MUST display as uniform squares in a horizontally browsable format with consistent spacing
+- **FR-023**: System MUST use a dark color scheme with distinct visual hierarchy between primary background, elevated surfaces, primary text, secondary text, interactive elements, and borders
+- **FR-024**: All text MUST be readable against dark backgrounds with contrast ratios exceeding WCAG AA minimum standards (4.5:1 for normal text)
+
+### Typography Requirements
+
+- **FR-025**: Camera name MUST be the most prominent text element in each card with highest visual weight
+- **FR-026**: Direction label MUST be visually secondary to camera name but clearly readable
+- **FR-027**: Timestamp MUST be smallest metadata text element, visually subordinate to name and direction
+- **FR-028**: Long camera names MUST be truncated to fit card width with indication of full name available on interaction
+- **FR-029**: Timestamps MUST display in human-readable format showing month, day, year, and time in 12-hour format
+- **FR-030**: System MUST use standard system fonts that render natively on user's operating system
+
+### Interaction State Requirements
+
+- **FR-031**: Camera cards MUST provide clear visual feedback on hover with border highlight, shadow, and subtle lift effect with smooth animation
+- **FR-032**: Camera cards MUST display distinct keyboard focus indicator that is visible and does not cause motion (accessibility consideration)
+- **FR-033**: Camera cards MUST show pressed/active state visual feedback when clicked
+- **FR-034**: Historical snapshot thumbnails MUST indicate interactivity on hover with visual highlighting
+- **FR-035**: All interactive elements MUST meet WCAG 2.5.5 minimum touch target size for accessibility
+- **FR-036**: Non-interactive cards (when data unavailable) MUST appear visually disabled with no interaction feedback
+
+### Accessibility Requirements
+
+- **FR-037**: All camera cards MUST be keyboard navigable in logical visual reading order
+- **FR-038**: Camera cards MUST provide screen readers with complete context including camera name, direction, and last update time
+- **FR-039**: "Image unavailable" placeholders MUST communicate the missing state to screen reader users
+- **FR-040**: Navigation back to landing page MUST be keyboard accessible and labeled for screen readers
+- **FR-041**: Historical snapshot thumbnails MUST provide screen readers with timestamp context for each image
+- **FR-042**: Keyboard focus MUST be clearly visible at all times for all interactive elements
+- **FR-043**: Information MUST NOT be conveyed through color alone (must combine with text, icons, or other visual indicators)
+
+### Layout & Positioning Requirements
+
+- **FR-044**: Camera detail page metadata MUST remain visible while scrolling (sticky header) with semi-transparent background to maintain readability over images
+- **FR-045**: Historical snapshots section MUST have clear visual separation from the main snapshot image
+- **FR-046**: "Image unavailable" placeholder MUST display centered icon and text with camera metadata maintaining standard card layout
+- **FR-047**: Loading states MUST display placeholder content with shimmer animation indicating content is being loaded
+
+### Error & Edge Case Visual Requirements
+
+- **FR-048**: "Timestamp unavailable" MUST be visually distinguishable from normal timestamps (grayed and italicized)
+- **FR-049**: "Direction unavailable" MUST be visually distinguishable from normal direction labels (grayed and italicized)
+- **FR-050**: Cameras with no historical snapshots MUST display explanatory message instead of empty thumbnail area
+- **FR-051**: Grid layout MUST maintain structure even when all cameras have missing images (no layout collapse)
+
 ### Key Entities
 
 - **Camera**: Represents a physical camera on Mauna Kea with attributes including unique identifier, display name, directional aiming (compass direction or orientation), and metadata about snapshot availability
@@ -115,6 +169,12 @@ While viewing a specific camera's detail page, a user can easily navigate to adj
 - **SC-004**: Camera detail pages display the latest snapshot plus 10 historical snapshots for each camera
 - **SC-005**: All text maintains a minimum contrast ratio of 4.5:1 against dark backgrounds (WCAG AA compliance)
 - **SC-006**: Users can successfully navigate between all cameras and back to the landing page without encountering broken links or navigation errors
+- **SC-007**: All camera cards maintain identical dimensions and aspect ratio across all viewport sizes (verifiable via visual inspection and measurement tools)
+- **SC-008**: Grid layout adapts column count appropriately for desktop, tablet, and mobile viewports (verifiable via responsive testing)
+- **SC-009**: Interactive feedback animations complete smoothly without perceptible lag (verifiable via user testing)
+- **SC-010**: All interactive elements meet accessibility standards for touch target size (verifiable via accessibility audit tools)
+- **SC-011**: All camera cards and navigation links are reachable via keyboard in logical order (verifiable via keyboard-only testing)
+- **SC-012**: Loading indicators appear promptly when content is not immediately available (verifiable via network throttling tests)
 
 ## Assumptions
 
