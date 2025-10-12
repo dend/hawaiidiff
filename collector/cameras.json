@@ -1,0 +1,203 @@
+{
+    "$schema": "contracts/cameras-schema.json",
+    "cameras": [
+    {
+        "id": "gemini-telescope",
+        "name": "Gemini Telescope",
+        "direction": "S",
+        "uri": "https://www.cfht.hawaii.edu/en/gallery/gemdome/gemdome.jpg"
+    },
+    {
+        "id": "cfht-telescope",
+        "name": "CFHT Telescope",
+        "direction": "N",
+        "uri": "https://www.cfht.hawaii.edu/en/gallery/cfhtdome/cfhtdome.jpg"
+    },
+    {
+        "id": "cfht-c4",
+        "name": "CFHT-C4",
+        "direction": "NW",
+        "uri": "https://www.cfht.hawaii.edu/en/gallery/c4/c4.jpg"
+    },
+    {
+        "id": "cfht-c3",
+        "name": "CFHT-C3",
+        "direction": "ESE",
+        "uri": "https://www.cfht.hawaii.edu/en/gallery/c3/c3.jpg"
+    },
+    {
+        "id": "gemini-hilo",
+        "name": "Gemini Hilo",
+        "direction": "Hilo",
+        "uri": "https://www.gemini.edu/sciops/schedules/obsStatus/currentstill_Hilo.png"
+    },
+    {
+        "id": "gemini-south",
+        "name": "Gemini South",
+        "direction": "S",
+        "uri": "https://www.gemini.edu/sciops/schedules/obsStatus/currentstill_South.png"
+    },
+    {
+        "id": "gemini-west",
+        "name": "Gemini West",
+        "direction": "W",
+        "uri": "https://www.gemini.edu/sciops/schedules/obsStatus/currentstill_West.png"
+    },
+    {
+        "id": "gemini-north",
+        "name": "Gemini North",
+        "direction": "N",
+        "uri": "https://www.gemini.edu/sciops/schedules/obsStatus/currentstill_North.png"
+    },
+    {
+        "id": "gemini-east",
+        "name": "Gemini East",
+        "direction": "E",
+        "uri": "https://www.gemini.edu/sciops/schedules/obsStatus/currentstill_Up.png"
+    },
+    {
+        "id": "cfht-nana-ao",
+        "name": "CFHT Nānā ao",
+        "direction": "E",
+        "uri": "https://www.cfht.hawaii.edu/images/webcam/nanaao.jpg"
+    },
+    {
+        "id": "cfht-nana-ao-mosaic",
+        "name": "CFHT Nānā ao Mosaic",
+        "direction": "Up",
+        "uri": "https://www.cfht.hawaii.edu/~nanaao/last.png"
+    },
+    {
+        "id": "cfht-nana-ao-difference",
+        "name": "CFHT Nānā ao Difference",
+        "direction": "Up",
+        "uri": "https://www.cfht.hawaii.edu/~nanaao/last_diff.png"
+    },
+    {
+        "id": "cfht-nana-ao-infrared",
+        "name": "CFHT Nānā ao Infrared",
+        "direction": "Up",
+        "uri": "https://www.cfht.hawaii.edu/~nanaao/last_ir.png"
+    },
+    {
+        "id": "cfht-nana-ao-visible",
+        "name": "CFHT Nānā ao Visible",
+        "direction": "Up",
+        "uri": "https://www.cfht.hawaii.edu/~nanaao/last_vis.png"
+    },
+    {
+        "id": "ukirt",
+        "name": "UKIRT",
+        "direction": "SW",
+        "uri": "https://ukirt.ifa.hawaii.edu/webcam"
+    },
+    {
+        "id": "ukirt-dome",
+        "name": "UKIRT Dome",
+        "direction": "SW",
+        "uri": "https://ukirt.ifa.hawaii.edu/domecam"
+    },
+    {
+        "id": "jcmt",
+        "name": "JCMT",
+        "direction": "Variable",
+        "uri": "http://www.eao.hawaii.edu/weather/images/jcmt.jpg"
+    },
+    {
+        "id": "subaru-cat-walk-nw",
+        "name": "Subaru Cat Walk",
+        "direction": "NW",
+        "uri": "https://www.naoj.hawaii.edu/Weather/CATWALK/cw66.png"
+    },
+    {
+        "id": "subaru-cat-walk-se",
+        "name": "Subaru Cat Walk",
+        "direction": "SE",
+        "uri": "https://www.naoj.hawaii.edu/Weather/CATWALK/cw68.png"
+    },
+    {
+        "id": "subaru-cat-walk-sw",
+        "name": "Subaru Cat Walk",
+        "direction": "SW",
+        "uri": "https://www.naoj.hawaii.edu/Weather/CATWALK/cw70.png"
+    },
+    {
+        "id": "subaru-cat-walk-ne",
+        "name": "Subaru Cat Walk",
+        "direction": "NE",
+        "uri": "https://www.naoj.hawaii.edu/Weather/CATWALK/cw72.png"
+    },
+    {
+        "id": "subaru-all-sky",
+        "name": "Subaru All Sky",
+        "direction": "Up",
+        "uri": "https://www.naoj.hawaii.edu/allsky/current_web.png"
+    },
+    {
+        "id": "keck1",
+        "name": "Keck1",
+        "direction": "E",
+        "uri": "https://www2.keck.hawaii.edu/realtime/webcam/kcam_1.jpg"
+    },
+    {
+        "id": "keck-2-weather-mast",
+        "name": "Keck 2 Weather Mast",
+        "direction": "VAR",
+        "uri": "https://www2.keck.hawaii.edu/realtime/webcam/weatherMast.jpg"
+    },
+    {
+        "id": "irtf-bunker-c166-mauna-loa",
+        "name": "IRTF Bunker C166 Mauna Loa",
+        "direction": "S",
+        "uri": "https://irtfweb.ifa.hawaii.edu/~irtfcameras/c166/latests.jpg"
+    },
+    {
+        "id": "irtf-bunker-c161-waimea-cam-nw",
+        "name": "IRTF Bunker C161 WaimeaCamNW",
+        "direction": "N",
+        "uri": "https://irtfweb.ifa.hawaii.edu/~irtfcameras/c161/latests.jpg"
+    },
+    {
+        "id": "irtf-bunker-c168-bunker-door",
+        "name": "IRTF Bunker C168 BunkerDoor",
+        "direction": "E",
+        "uri": "https://irtfweb.ifa.hawaii.edu/~irtfcameras/c168/latests.jpg"
+    },
+    {
+        "id": "irtf-bunker-c160-frontdoor-ptz",
+        "name": "IRTF Bunker C160 FrontDoor (PTZ)",
+        "direction": "W",
+        "uri": "https://irtfweb.ifa.hawaii.edu/~irtfcameras/c160/latests.jpg"
+    },
+    {
+        "id": "irtf-bunker-c159-bunkercam-ptz",
+        "name": "IRTF Bunker C159 BunkerCam (PTZ)",
+        "direction": "E",
+        "uri": "https://irtfweb.ifa.hawaii.edu/~irtfcameras/c159/latests.jpg"
+    },
+    {
+        "id": "vlba",
+        "name": "VLBA",
+        "direction": "S",
+        "uri": "http://www.vlba.nrao.edu/sites/SITECAM/MKSNAP.JPG"
+    },
+    {
+        "id": "sma-mlo-camera",
+        "name": "SMA/MLO Camera",
+        "direction": "S",
+        "uri": "https://gml.noaa.gov/webdata/mlo/webcam/mkcam.jpg"
+    },
+    {
+        "id": "mk-visitor-center-dorm",
+        "name": "MK Visitor Center Dorm",
+        "direction": "W",
+        "uri": "https://hp.ifa.hawaii.edu/cams/dormb-ptz.jpg"
+    },
+    {
+        "id": "mlo-solar-radiation-deck",
+        "name": "MLO Solar Radiation Deck",
+        "direction": "E",
+        "uri": "https://gml.noaa.gov/webdata/mlo/webcam/deckcam.jpg"
+    }
+  ]
+}

@@ -1,0 +1,366 @@
+/* CSS Custom Properties - Dark Theme Color Palette */
+:root {
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2a2a2a;
+  --text-primary: #e0e0e0;
+  --text-secondary: #b0b0b0;
+  --accent: #4a9eff;
+  --border: #3a3a3a;
+}
+
+/* CSS Reset and Base Styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Focus Visibility - Always visible, no outline: none */
+*:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Link defaults */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Container and Layout */
+.container {
+  max-width: 2000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.site-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+/* Camera Grid - Responsive Layout */
+.camera-grid {
+  display: grid;
+  gap: 24px;
+}
+
+/* Desktop: 6 columns */
+@media (min-width: 1200px) {
+  .camera-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* Tablet: 4 columns */
+@media (min-width: 768px) and (max-width: 1199px) {
+  .camera-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Mobile: 2 columns, smaller gap */
+@media (max-width: 767px) {
+  .camera-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+/* Camera Card Styling */
+.camera-card-link {
+  display: block;
+  justify-self: center;
+}
+
+.camera-card {
+  width: 320px;
+  height: 320px;
+  aspect-ratio: 1 / 1;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 200ms ease-out;
+}
+
+.card-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Camera Image Styling */
+.camera-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 4px;
+  background-color: var(--bg-primary);
+  margin-bottom: 12px;
+}
+
+.camera-image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Camera Metadata Typography */
+.camera-metadata {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.camera-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.camera-direction {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+.camera-timestamp {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+/* Unavailable state styling */
+.unavailable {
+  font-style: italic;
+  color: #808080;
+  opacity: 0.7;
+}
+
+/* Image Placeholder */
+.image-placeholder {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-primary);
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.icon-camera-off {
+  opacity: 0.5;
+}
+
+/* Interaction States */
+.camera-card-link:hover .camera-card,
+.camera-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.camera-card-link:focus,
+.camera-card:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.camera-card-link:active .camera-card,
+.camera-card:active {
+  transform: translateY(0);
+  opacity: 0.9;
+}
+
+/* Camera Detail Page Styles */
+.camera-detail-header {
+  position: sticky;
+  top: 0;
+  background: rgba(42, 42, 42, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  height: 80px;
+  z-index: 100;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+}
+
+.header-content {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.back-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  font-size: 16px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: background-color 200ms ease-out;
+}
+
+.back-link:hover {
+  background-color: rgba(74, 158, 255, 0.1);
+}
+
+.header-metadata {
+  flex: 1;
+}
+
+.header-metadata .camera-name {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.header-metadata .camera-direction {
+  font-size: 16px;
+}
+
+.camera-detail-main {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.latest-snapshot-section {
+  margin-bottom: 40px;
+}
+
+.camera-detail-image {
+  width: 100%;
+  max-width: 1200px;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 767px) {
+  .camera-detail-image {
+    width: 100%;
+  }
+}
+
+.camera-timestamp-detail {
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.image-placeholder-large {
+  width: 100%;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  gap: 16px;
+}
+
+.snapshot-history-section {
+  margin-top: 48px;
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.snapshot-history {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+}
+
+.snapshot-history::-webkit-scrollbar {
+  height: 8px;
+}
+
+.snapshot-history::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.snapshot-history::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.snapshot-history::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+.snapshot-thumbnail-wrapper {
+  flex-shrink: 0;
+}
+
+.snapshot-thumbnail {
+  width: 160px;
+  height: 160px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  opacity: 0.85;
+  transition: all 200ms ease-out;
+}
+
+.snapshot-thumbnail:hover {
+  border-color: var(--accent);
+  opacity: 1;
+}
+
+.snapshot-thumbnail:active {
+  opacity: 0.75;
+}
+
+.no-snapshots {
+  font-size: 16px;
+  color: var(--text-secondary);
+  font-style: italic;
+  text-align: center;
+  padding: 40px 20px;
+}

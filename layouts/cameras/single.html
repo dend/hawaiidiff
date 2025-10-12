@@ -1,0 +1,92 @@
+{{ partial "head.html" . }}
+<body>
+    {{/* Get camera data from JSON */}}
+    {{ $cameraId := path.Base .RelPermalink }}
+    {{ $cameraData := dict }}
+    {{ range $.Site.Data.cameras.cameras }}
+        {{ if eq .id $cameraId }}
+            {{ $cameraData = . }}
+        {{ end }}
+    {{ end }}
+    
+    {{/* Sticky header with metadata */}}
+    <header class="camera-detail-header">
+        <div class="header-content">
+            <a href="/" class="back-link" aria-label="Return to all cameras">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>All Cameras</span>
+            </a>
+            <div class="header-metadata">
+                <h1 class="camera-name">{{ $cameraData.name }}</h1>
+                <p class="camera-direction">{{ if $cameraData.direction }}{{ $cameraData.direction }}{{ else }}<span class="unavailable">Direction unavailable</span>{{ end }}</p>
+            </div>
+        </div>
+    </header>
+    
+    <main class="camera-detail-main">
+        {{/* Find latest snapshot */}}
+        {{ $imageDir := printf "data/images/%s" $cameraId }}
+        {{ $latestSnapshot := "" }}
+        {{ $latestFilename := "" }}
+        {{ $historicalSnapshots := slice }}
+        
+        {{ with os.ReadDir $imageDir }}
+            {{ $files := sort . "Name" "desc" }}
+            {{ $count := 0 }}
+            {{ range $files }}
+                {{ if not .IsDir }}
+                    {{ if strings.HasSuffix .Name ".webp" }}
+                        {{ if eq $latestSnapshot "" }}
+                            {{ $latestSnapshot = printf "%s/%s" $imageDir .Name }}
+                            {{ $latestFilename = .Name }}
+                        {{ else if lt $count 10 }}
+                            {{ $historicalSnapshots = $historicalSnapshots | append . }}
+                            {{ $count = add $count 1 }}
+                        {{ end }}
+                    {{ end }}
+                {{ end }}
+            {{ end }}
+        {{ end }}
+        
+        {{/* Latest snapshot display */}}
+        <section class="latest-snapshot-section">
+            {{ if $latestSnapshot }}
+                <img src="/{{ $latestSnapshot }}" alt="{{ $cameraData.name }} - Latest Snapshot" class="camera-detail-image">
+                <p class="camera-timestamp-detail" data-timestamp="{{ $latestFilename }}">Loading...</p>
+            {{ else }}
+                <div class="image-placeholder-large">
+                    <svg class="icon-camera-off" width="96" height="96" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 9C13.66 9 15 10.34 15 12C15 13.66 13.66 15 12 15C10.34 15 9 13.66 9 12C9 10.34 10.34 9 12 9ZM12 7C9.24 7 7 9.24 7 12C7 14.76 9.24 17 12 17C14.76 17 17 14.76 17 12C17 9.24 14.76 7 12 7ZM12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2Z" fill="#808080"/>
+                    </svg>
+                    <p class="unavailable" style="font-size: 20px;">Image unavailable</p>
+                </div>
+            {{ end }}
+        </section>
+        
+        {{/* Historical snapshots */}}
+        <section class="snapshot-history-section">
+            <h2 class="section-title">Previous Snapshots</h2>
+            {{ if gt (len $historicalSnapshots) 0 }}
+                <div class="snapshot-history">
+                    {{ range $historicalSnapshots }}
+                        <div class="snapshot-thumbnail-wrapper">
+                            <img src="/{{ $imageDir }}/{{ .Name }}" 
+                                 alt="Snapshot from {{ .Name }}" 
+                                 class="snapshot-thumbnail"
+                                 data-timestamp="{{ .Name }}">
+                        </div>
+                    {{ end }}
+                </div>
+            {{ else }}
+                <p class="no-snapshots">No previous snapshots available</p>
+            {{ end }}
+        </section>
+    </main>
+    
+    {{/* Include JavaScript */}}
+    {{ $js := resources.Get "js/main.js" | minify }}
+    <script src="{{ $js.RelPermalink }}"></script>
+</body>
+</html>
