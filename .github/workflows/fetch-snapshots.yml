@@ -27,13 +27,13 @@ jobs:
       - name: Check for changes
         id: check_changes
         run: |
-          git diff --quiet data/images/ || echo "changes=true" >> $GITHUB_OUTPUT
+          git diff --quiet static/images/ || echo "changes=true" >> $GITHUB_OUTPUT
           
       - name: Commit and push if changes
         if: steps.check_changes.outputs.changes == 'true'
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
-          git add data/images/
+          git add static/images/
           git commit -m "Update camera snapshots - $(date -u '+%Y-%m-%d %H:%M UTC')"
           git push
