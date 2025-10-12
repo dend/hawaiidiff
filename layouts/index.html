@@ -7,7 +7,7 @@
             {{ $cameras := partial "camera-data.html" . }}
             {{ range $cameras }}
                 {{/* Find latest snapshot for this camera - move before link */}}
-                {{ $imageDir := printf "data/images/%s" .id }}
+                {{ $imageDir := printf "static/images/%s" .id }}
                 {{ $latestSnapshot := "" }}
                 {{ $latestFilename := "" }}
                 {{ with os.ReadDir $imageDir }}
@@ -30,7 +30,7 @@
                     <div class="card-content">
                         
                         {{ if $latestSnapshot }}
-                            <img src="/{{ $latestSnapshot }}" alt="{{ .name }} - {{ .direction }}" loading="lazy">
+                            <img src="/images/{{ .id }}/{{ $latestFilename }}" alt="{{ .name }} - {{ .direction }}" loading="lazy">
                         {{ else }}
                             <div class="image-placeholder">
                                 <svg class="icon-camera-off" width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

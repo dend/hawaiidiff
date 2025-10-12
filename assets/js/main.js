@@ -58,4 +58,51 @@ document.addEventListener('DOMContentLoaded', function() {
     const filename = element.getAttribute('data-timestamp');
     element.textContent = formatTimestamp(filename);
   });
+  
+  // Initialize keyboard navigation for camera detail pages
+  initKeyboardNavigation();
 });
+
+/**
+ * Keyboard navigation for camera detail pages
+ */
+function initKeyboardNavigation() {
+  // Only initialize on camera detail pages
+  if (!document.querySelector('.camera-navigation')) {
+    return;
+  }
+  
+  document.addEventListener('keydown', function(event) {
+    // Don't trigger if user is typing in an input field
+    if (event.target.tagName === 'INPUT' || 
+        event.target.tagName === 'TEXTAREA' || 
+        event.target.isContentEditable) {
+      return;
+    }
+    
+    const prevButton = document.querySelector('.nav-prev');
+    const nextButton = document.querySelector('.nav-next');
+    
+    // Left arrow or 'p' for previous
+    if (event.key === 'ArrowLeft' || event.key === 'p') {
+      event.preventDefault();
+      if (prevButton) {
+        prevButton.click();
+      }
+    }
+    
+    // Right arrow or 'n' for next
+    if (event.key === 'ArrowRight' || event.key === 'n') {
+      event.preventDefault();
+      if (nextButton) {
+        nextButton.click();
+      }
+    }
+    
+    // Home key to go to first camera
+    if (event.key === 'Home') {
+      event.preventDefault();
+      window.location.href = '/';
+    }
+  });
+}

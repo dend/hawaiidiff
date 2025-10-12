@@ -1,0 +1,39 @@
+name: Fetch Camera Snapshots
+
+on:
+  schedule:
+    # Run every 20 minutes
+    - cron: '*/20 * * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  fetch-snapshots:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq webp
+          
+      - name: Run fetch script
+        run: |
+          cd collector
+          ./fetch-snapshots.sh
+          
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git diff --quiet data/images/ || echo "changes=true" >> $GITHUB_OUTPUT
+          
+      - name: Commit and push if changes
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add data/images/
+          git commit -m "Update camera snapshots - $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git push

@@ -27,7 +27,7 @@
     
     <main class="camera-detail-main">
         {{/* Find latest snapshot */}}
-        {{ $imageDir := printf "data/images/%s" $cameraId }}
+        {{ $imageDir := printf "static/images/%s" $cameraId }}
         {{ $latestSnapshot := "" }}
         {{ $latestFilename := "" }}
         {{ $historicalSnapshots := slice }}
@@ -53,7 +53,7 @@
         {{/* Latest snapshot display */}}
         <section class="latest-snapshot-section">
             {{ if $latestSnapshot }}
-                <img src="/{{ $latestSnapshot }}" alt="{{ $cameraData.name }} - Latest Snapshot" class="camera-detail-image">
+                <img src="/images/{{ $cameraId }}/{{ $latestFilename }}" alt="{{ $cameraData.name }} - Latest Snapshot" class="camera-detail-image">
                 <p class="camera-timestamp-detail" data-timestamp="{{ $latestFilename }}">Loading...</p>
             {{ else }}
                 <div class="image-placeholder-large">
@@ -72,7 +72,7 @@
                 <div class="snapshot-history">
                     {{ range $historicalSnapshots }}
                         <div class="snapshot-thumbnail-wrapper">
-                            <img src="/{{ $imageDir }}/{{ .Name }}" 
+                            <img src="/images/{{ $cameraId }}/{{ .Name }}" 
                                  alt="Snapshot from {{ .Name }}" 
                                  class="snapshot-thumbnail"
                                  data-timestamp="{{ .Name }}">
@@ -83,6 +83,9 @@
                 <p class="no-snapshots">No previous snapshots available</p>
             {{ end }}
         </section>
+        
+        {{/* Camera Navigation */}}
+        {{ partial "camera-nav.html" . }}
     </main>
     
     {{/* Include JavaScript */}}
