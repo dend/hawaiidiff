@@ -45,11 +45,114 @@ a {
 
 /* Site Header */
 .site-header {
-  background-color: var(--bg-secondary);
+  background: linear-gradient(135deg, #0a0e1a 0%, #1a1a2e 50%, #16213e 100%);
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
   z-index: 1000;
+  overflow: hidden;
+}
+
+/* Milky Way band */
+.site-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -10%;
+  right: -10%;
+  bottom: -50%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    transparent 35%,
+    rgba(100, 120, 180, 0.15) 40%,
+    rgba(140, 160, 220, 0.25) 45%,
+    rgba(160, 180, 240, 0.35) 50%,
+    rgba(140, 160, 220, 0.25) 55%,
+    rgba(100, 120, 180, 0.15) 60%,
+    transparent 65%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Twinkling stars */
+.site-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    /* Milky Way stars - denser in the center band with varied positioning */
+    radial-gradient(1px 1px at 32% 42%, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(1px 1px at 36% 58%, rgba(255, 255, 255, 0.65), transparent),
+    radial-gradient(2px 2px at 39% 47%, rgba(255, 255, 255, 0.85), transparent),
+    radial-gradient(1px 1px at 41% 61%, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 44% 44%, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(2px 2px at 47% 56%, rgba(255, 255, 255, 0.95), transparent),
+    radial-gradient(1px 1px at 49% 49%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 51% 63%, rgba(255, 255, 255, 0.75), transparent),
+    radial-gradient(2px 2px at 53% 51%, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(1px 1px at 56% 45%, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 58% 59%, rgba(255, 255, 255, 0.85), transparent),
+    radial-gradient(1px 1px at 61% 53%, rgba(255, 255, 255, 0.65), transparent),
+    radial-gradient(2px 2px at 63% 48%, rgba(255, 255, 255, 0.9), transparent),
+    radial-gradient(1px 1px at 66% 62%, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 68% 46%, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 71% 57%, rgba(255, 255, 255, 0.75), transparent),
+    radial-gradient(2px 2px at 74% 51%, rgba(255, 255, 255, 0.85), transparent),
+    radial-gradient(1px 1px at 77% 54%, rgba(255, 255, 255, 0.65), transparent),
+    /* Additional Milky Way micro-stars for density */
+    radial-gradient(1px 1px at 40% 52%, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 45% 60%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 50% 46%, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(1px 1px at 55% 64%, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 60% 50%, rgba(255, 255, 255, 0.65), transparent),
+    radial-gradient(1px 1px at 65% 58%, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 70% 49%, rgba(255, 255, 255, 0.6), transparent),
+    /* Scattered stars throughout - varied positions */
+    radial-gradient(2px 2px at 15px 28px, rgba(255, 255, 255, 0.75), transparent),
+    radial-gradient(1px 1px at 42px 73px, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 67px 19px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(2px 2px at 95px 82px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 118px 36px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 143px 67px, rgba(255, 255, 255, 0.65), transparent),
+    radial-gradient(2px 2px at 167px 24px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 192px 78px, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 215px 41px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(2px 2px at 238px 88px, rgba(255, 255, 255, 0.85), transparent),
+    radial-gradient(1px 1px at 263px 15px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 287px 69px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 312px 33px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(2px 2px at 336px 76px, rgba(255, 255, 255, 0.75), transparent),
+    radial-gradient(1px 1px at 361px 22px, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 385px 84px, rgba(255, 255, 255, 0.65), transparent),
+    radial-gradient(2px 2px at 409px 48px, rgba(255, 255, 255, 0.8), transparent),
+    radial-gradient(1px 1px at 434px 71px, rgba(255, 255, 255, 0.5), transparent),
+    radial-gradient(1px 1px at 458px 27px, rgba(255, 255, 255, 0.7), transparent),
+    radial-gradient(1px 1px at 483px 63px, rgba(255, 255, 255, 0.6), transparent),
+    radial-gradient(2px 2px at 507px 38px, rgba(255, 255, 255, 0.85), transparent),
+    radial-gradient(1px 1px at 532px 80px, rgba(255, 255, 255, 0.55), transparent),
+    radial-gradient(1px 1px at 556px 44px, rgba(255, 255, 255, 0.65), transparent),
+    radial-gradient(2px 2px at 581px 91px, rgba(255, 255, 255, 0.75), transparent);
+  background-size: 600px 100px;
+  background-repeat: repeat;
+  animation: twinkling 120s linear infinite;
+  pointer-events: none;
+  opacity: 0.7;
+  z-index: 1;
+}
+
+@keyframes twinkling {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(600px);
+  }
 }
 
 .header-container {
@@ -59,6 +162,8 @@ a {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
+  z-index: 2;
 }
 
 .site-logo {
@@ -69,8 +174,29 @@ a {
 .logo-text {
   font-size: 24px;
   font-weight: 700;
-  color: var(--accent);
+  color: #ffffff;
   letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hibiscus {
+  font-size: 24px;
+  display: inline-block;
+  animation: hibiscus-glow 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.6));
+}
+
+@keyframes hibiscus-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 8px rgba(255, 105, 180, 0.6));
+    transform: scale(1);
+  }
+  50% {
+    filter: drop-shadow(0 0 16px rgba(255, 105, 180, 0.9)) drop-shadow(0 0 24px rgba(255, 105, 180, 0.5));
+    transform: scale(1.05);
+  }
 }
 
 .site-nav {
@@ -259,11 +385,15 @@ main {
 .camera-card img {
   width: 100%;
   height: 200px;
+  min-height: 200px;
+  max-height: 200px;
   object-fit: cover;
   object-position: center;
   border-radius: 4px;
   background-color: var(--bg-primary);
   margin-bottom: 12px;
+  flex-shrink: 0;
+  display: block;
 }
 
 .camera-image-placeholder {
@@ -290,6 +420,29 @@ main {
   white-space: nowrap;
 }
 
+.camera-info-row {
+  display: flex;
+  align-items: center;
+}
+
+.direction-pill-card {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  background-color: rgba(74, 158, 255, 0.15);
+  border: 1px solid rgba(74, 158, 255, 0.3);
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.direction-icon {
+  flex-shrink: 0;
+}
+
 .camera-direction {
   font-size: 14px;
   font-weight: 400;
@@ -313,6 +466,8 @@ main {
 .image-placeholder {
   width: 100%;
   height: 200px;
+  min-height: 200px;
+  max-height: 200px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -320,6 +475,7 @@ main {
   background-color: var(--bg-primary);
   border-radius: 4px;
   margin-bottom: 12px;
+  flex-shrink: 0;
 }
 
 .icon-camera-off {
@@ -347,15 +503,29 @@ main {
 /* Camera Detail Page Styles */
 .camera-detail-header {
   position: sticky;
-  top: 0;
+  top: 64px; /* Site header height */
   background: rgba(42, 42, 42, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  height: 80px;
+  padding: 20px 0;
   z-index: 100;
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
+  transition: padding 300ms ease-out;
+}
+
+.camera-detail-header.compact {
+  padding: 12px 0;
+}
+
+.camera-detail-header.compact .camera-timestamp-header,
+.camera-detail-header.compact .camera-navigation-inline {
+  display: none;
+}
+
+.camera-detail-header.compact .camera-name {
+  font-size: 18px;
 }
 
 .header-content {
@@ -365,32 +535,80 @@ main {
   padding: 0 20px;
   display: flex;
   align-items: center;
-  gap: 32px;
-}
-
-.back-link {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--accent);
-  font-size: 16px;
-  font-weight: 500;
-  padding: 8px 16px;
-  border-radius: 4px;
-  transition: background-color 200ms ease-out;
-}
-
-.back-link:hover {
-  background-color: rgba(74, 158, 255, 0.1);
 }
 
 .header-metadata {
   flex: 1;
 }
 
+.camera-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .header-metadata .camera-name {
   font-size: 24px;
-  margin-bottom: 4px;
+  margin: 0;
+}
+
+.direction-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  background-color: rgba(74, 158, 255, 0.15);
+  border: 1px solid rgba(74, 158, 255, 0.3);
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.camera-timestamp-header {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: 8px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.timestamp-date {
+  font-weight: 600;
+  color: var(--text-primary);
+  display: block;
+}
+
+.camera-navigation-inline {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-button-inline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--text-secondary);
+  background-color: rgba(74, 158, 255, 0.1);
+  border-radius: 4px;
+  transition: all 200ms ease-out;
+}
+
+.nav-button-inline:hover {
+  color: var(--accent);
+  background-color: rgba(74, 158, 255, 0.2);
+}
+
+.camera-position-inline {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  min-width: 60px;
+  text-align: center;
 }
 
 .header-metadata .camera-direction {
@@ -478,6 +696,9 @@ main {
 
 .snapshot-thumbnail-wrapper {
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .snapshot-thumbnail {
@@ -499,6 +720,21 @@ main {
 
 .snapshot-thumbnail:active {
   opacity: 0.75;
+}
+
+.snapshot-timestamp {
+  font-size: 14px;
+  color: var(--text-secondary);
+  text-align: left;
+  max-width: 160px;
+  line-height: 1.2;
+}
+
+.snapshot-timestamp .timestamp-date {
+  font-weight: 600;
+  color: var(--text-primary);
+  display: block;
+  font-size: 14px;
 }
 
 .no-snapshots {
@@ -620,4 +856,57 @@ main {
 .skeleton-text-short {
   width: 60%;
   height: 14px;
+}
+
+/* Mobile Responsive Styles */
+@media (max-width: 767px) {
+  /* Fix site header stars animation on mobile */
+  .site-header::after {
+    display: block;
+  }
+  
+  /* Camera detail header - stack vertically on mobile */
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .header-metadata {
+    width: 100%;
+  }
+  
+  .camera-navigation-inline {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .camera-title-row {
+    flex-wrap: wrap;
+  }
+  
+  .header-metadata .camera-name {
+    font-size: 20px;
+  }
+  
+  .camera-timestamp-header {
+    font-size: 13px;
+  }
+  
+  /* Previous snapshots - wrap instead of scroll */
+  .snapshot-history {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    justify-content: flex-start;
+  }
+  
+  .snapshot-thumbnail {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .snapshot-timestamp {
+    max-width: 140px;
+    font-size: 12px;
+  }
 }

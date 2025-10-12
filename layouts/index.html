@@ -42,7 +42,18 @@
                         
                         <div class="camera-metadata">
                             <h2 class="camera-name" {{ if gt (len .name) 40 }}title="{{ .name }}"{{ end }}>{{ .name }}</h2>
-                            <p class="camera-direction">{{ if .direction }}{{ .direction }}{{ else }}<span class="unavailable">Direction unavailable</span>{{ end }}</p>
+                            <div class="camera-info-row">
+                                {{ if .direction }}
+                                    <span class="direction-pill-card">
+                                        <svg class="direction-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 2L15.5 8.5L22 12L15.5 15.5L12 22L8.5 15.5L2 12L8.5 8.5L12 2Z" fill="currentColor" opacity="0.8"/>
+                                        </svg>
+                                        {{ .direction }}
+                                    </span>
+                                {{ else }}
+                                    <span class="unavailable">Direction unavailable</span>
+                                {{ end }}
+                            </div>
                             <p class="camera-timestamp" data-timestamp="{{ $latestFilename }}">{{ if $latestFilename }}Loading...{{ else }}<span class="unavailable">Timestamp unavailable</span>{{ end }}</p>
                         </div>
                     </div>
