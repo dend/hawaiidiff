@@ -28,6 +28,10 @@ HawaiiDiff was created by [Den Delimarsky](https://den.dev) to make it easier to
 
 Snapshots are collected periodically and converted to WebP format for efficient delivery. The site maintains the current snapshot plus 10 historical snapshots for each camera.
 
+## Full Snapshot History
+
+Want to see the complete archive of all snapshots? The full history is available in the [HawaiiDiff GitHub repository](https://github.com/dend/hawaiidiff), where all collected images are stored and version-controlled.
+
 ## Technology
 
 This site is built with [Hugo](https://gohugo.io/), a fast and flexible static site generator. Images are automatically fetched and processed using a custom collection script.
