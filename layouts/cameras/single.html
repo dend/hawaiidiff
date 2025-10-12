@@ -1,5 +1,7 @@
 {{ partial "head.html" . }}
 <body>
+    {{ partial "header.html" . }}
+    
     {{/* Get camera data from JSON */}}
     {{ $cameraId := path.Base .RelPermalink }}
     {{ $cameraData := dict }}
@@ -87,6 +89,8 @@
         {{/* Camera Navigation */}}
         {{ partial "camera-nav.html" . }}
     </main>
+    
+    {{ partial "footer.html" . }}
     
     {{/* Include JavaScript */}}
     {{ $js := resources.Get "js/main.js" | minify }}
