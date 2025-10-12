@@ -242,7 +242,7 @@ a {
 .footer-container {
   max-width: 2000px;
   margin: 0 auto;
-  text-align: center;
+  text-align: left;
 }
 
 .footer-text {
@@ -682,49 +682,35 @@ main {
 }
 
 .snapshot-history {
-  display: flex;
-  gap: 12px;
-  row-gap: 24px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  max-width: 1200px;
 }
 
 .snapshot-thumbnail-wrapper {
-  flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  gap: 8px;
 }
 
 .snapshot-thumbnail {
-  width: 200px;
-  height: 200px;
+  width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 4px;
-  border: 2px solid transparent;
-  box-sizing: border-box;
   cursor: pointer;
-  opacity: 0.85;
-  transition: all 200ms ease-out;
-}
-
-.snapshot-thumbnail:hover {
-  border-color: var(--accent);
-  opacity: 1;
-}
-
-.snapshot-thumbnail:active {
-  opacity: 0.75;
 }
 
 .snapshot-timestamp {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-secondary);
   text-align: left;
-  width: 200px;
   line-height: 1.2;
-  padding-left: 2px;
-  box-sizing: border-box;
 }
 
 .snapshot-timestamp .timestamp-date {
@@ -801,6 +787,7 @@ main {
   .camera-navigation {
     flex-direction: column;
     gap: 16px;
+    align-items: flex-start;
   }
   
   .nav-button {
@@ -809,6 +796,8 @@ main {
   
   .camera-position {
     order: -1;
+    width: 100%;
+    text-align: left;
   }
 }
 
@@ -875,7 +864,7 @@ main {
   
   .camera-navigation-inline {
     width: 100%;
-    justify-content: center;
+    justify-content: flex-start;
   }
   
   .camera-title-row {
@@ -897,13 +886,21 @@ main {
     justify-content: flex-start;
   }
   
+  .snapshot-thumbnail-wrapper {
+    width: 100%;
+    max-width: 100%;
+  }
+  
   .snapshot-thumbnail {
-    width: 160px;
-    height: 160px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    object-position: center;
   }
   
   .snapshot-timestamp {
-    width: 160px;
+    width: 100%;
     font-size: 12px;
   }
 }
