@@ -74,8 +74,8 @@ While viewing a specific camera's detail page, a user can easily navigate to adj
 
 - When a camera snapshot image fails to load or is unavailable, the card displays camera metadata (name, direction) with an "Image unavailable" message
 - When cameras have missing or invalid timestamp data, display "Timestamp unavailable" in place of the timestamp
-- When a camera has fewer than 10 historical snapshots available, display only the available snapshots (1-9 images)
-- How are cameras with very long names displayed in the card layout without breaking the design?
+- When a camera has fewer than 10 historical snapshots available (excluding the currently displayed latest), display only the available snapshots (1-9 images)
+- When camera names exceed 40 characters, truncate with ellipsis and provide full name via title attribute
 - When camera directional information is missing, display "Direction unavailable" in place of the direction
 - How does the layout adapt to different screen sizes (mobile, tablet, desktop)?
 
@@ -86,13 +86,13 @@ While viewing a specific camera's detail page, a user can easily navigate to adj
 - **FR-001**: System MUST display exactly 34 camera cards on the landing page
 - **FR-002**: System MUST present each camera card as a uniform square regardless of original image dimensions
 - **FR-003**: System MUST display the following metadata for each camera card: camera name, directional aiming, and last snapshot timestamp
-- **FR-004**: System MUST display a placeholder with camera metadata and "Image unavailable" message when snapshot images fail to load
-- **FR-005**: System MUST display "Timestamp unavailable" when timestamp data is missing or invalid
-- **FR-006**: System MUST display "Direction unavailable" when directional information is missing
+- **FR-004**: System MUST display a placeholder with camera metadata and "Image unavailable" message when snapshot images fail to load, with centered layout matching card dimensions and grayed italic styling
+- **FR-005**: System MUST display "Timestamp unavailable" in grayed italic style when timestamp data is missing or invalid
+- **FR-006**: System MUST display "Direction unavailable" in grayed italic style when directional information is missing
 - **FR-007**: System MUST allow users to click on any camera card to navigate to that camera's detail page
 - **FR-008**: Camera detail page MUST display camera metadata (name, direction, timestamp) at the top of the page
 - **FR-009**: Camera detail page MUST show the latest snapshot in a large, prominent view
-- **FR-010**: Camera detail page MUST display up to 10 most recent previous snapshots in browsable format (or all available if fewer than 10 exist)
+- **FR-010**: Camera detail page MUST display up to 10 most recent previous snapshots (excluding the currently displayed latest snapshot) in browsable format (or all available if fewer than 10 exist)
 - **FR-011**: System MUST use a dark theme for all pages
 - **FR-012**: System MUST use color schemes that meet WCAG AA accessibility standards for contrast ratios
 - **FR-013**: System MUST provide navigation from camera detail pages back to the landing page
@@ -116,7 +116,7 @@ While viewing a specific camera's detail page, a user can easily navigate to adj
 - **FR-025**: Camera name MUST be the most prominent text element in each card with highest visual weight
 - **FR-026**: Direction label MUST be visually secondary to camera name but clearly readable
 - **FR-027**: Timestamp MUST be smallest metadata text element, visually subordinate to name and direction
-- **FR-028**: Long camera names MUST be truncated to fit card width with indication of full name available on interaction
+- **FR-028**: Long camera names exceeding 40 characters MUST be truncated with ellipsis to fit card width, with full name available via HTML title attribute on hover
 - **FR-029**: Timestamps MUST display in human-readable format showing month, day, year, and time in 12-hour format
 - **FR-030**: System MUST use standard system fonts that render natively on user's operating system
 
@@ -143,15 +143,12 @@ While viewing a specific camera's detail page, a user can easily navigate to adj
 
 - **FR-044**: Camera detail page metadata MUST remain visible while scrolling (sticky header) with semi-transparent background to maintain readability over images
 - **FR-045**: Historical snapshots section MUST have clear visual separation from the main snapshot image
-- **FR-046**: "Image unavailable" placeholder MUST display centered icon and text with camera metadata maintaining standard card layout
-- **FR-047**: Loading states MUST display placeholder content with shimmer animation indicating content is being loaded
+- **FR-046**: Loading states MUST display placeholder content with shimmer animation indicating content is being loaded
 
 ### Error & Edge Case Visual Requirements
 
-- **FR-048**: "Timestamp unavailable" MUST be visually distinguishable from normal timestamps (grayed and italicized)
-- **FR-049**: "Direction unavailable" MUST be visually distinguishable from normal direction labels (grayed and italicized)
-- **FR-050**: Cameras with no historical snapshots MUST display explanatory message instead of empty thumbnail area
-- **FR-051**: Grid layout MUST maintain structure even when all cameras have missing images (no layout collapse)
+- **FR-047**: Cameras with no historical snapshots MUST display explanatory message instead of empty thumbnail area
+- **FR-048**: Grid layout MUST maintain structure even when all cameras have missing images (no layout collapse)
 
 ### Key Entities
 
@@ -171,7 +168,7 @@ While viewing a specific camera's detail page, a user can easily navigate to adj
 - **SC-006**: Users can successfully navigate between all cameras and back to the landing page without encountering broken links or navigation errors
 - **SC-007**: All camera cards maintain identical dimensions and aspect ratio across all viewport sizes (verifiable via visual inspection and measurement tools)
 - **SC-008**: Grid layout adapts column count appropriately for desktop, tablet, and mobile viewports (verifiable via responsive testing)
-- **SC-009**: Interactive feedback animations complete smoothly without perceptible lag (verifiable via user testing)
+- **SC-009**: Interactive feedback animations complete smoothly within 200ms transition time (verifiable via browser DevTools performance monitoring)
 - **SC-010**: All interactive elements meet accessibility standards for touch target size (verifiable via accessibility audit tools)
 - **SC-011**: All camera cards and navigation links are reachable via keyboard in logical order (verifiable via keyboard-only testing)
 - **SC-012**: Loading indicators appear promptly when content is not immediately available (verifiable via network throttling tests)

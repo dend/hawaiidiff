@@ -12,7 +12,7 @@ Build a static website using Hugo to visualize camera snapshots from 34 Mauna Ke
 ## Technical Context
 
 **Language/Version**: Hugo static site generator (latest stable), Bash shell scripting, HTML5, CSS3, vanilla JavaScript (ES6+)  
-**Primary Dependencies**: Hugo (static site generator only), ImageMagick or cwebp (for WebP conversion in bash script)  
+**Primary Dependencies**: Hugo (static site generator only), cwebp (for WebP conversion in bash script)  
 **Storage**: Local filesystem - cameras.json in collector/, images in data/images/, Hugo content in standard Hugo directories  
 **Testing**: Manual browser testing, Hugo server for local development  
 **Target Platform**: Modern web browsers (Chrome, Firefox, Safari, Edge) with CSS Grid and Flexbox support  
@@ -60,8 +60,8 @@ Build a static website using Hugo to visualize camera snapshots from 34 Mauna Ke
 - All artifacts are static files (Markdown documentation, JSON schemas)
 
 **Dependency Justification**:
-- **Hugo**: Static site generator is permitted under constitution ("Static site generators using only Markdown → HTML transformation"). Hugo is widely-available, well-documented, and generates pure static HTML/CSS/JS with no runtime dependencies. Alternative (hand-coded HTML) would violate DRY principles for 34+ camera pages.
-- **ImageMagick/cwebp**: Command-line tool for WebP conversion in bash script. Standard system utility, no npm installation required.
+- **Hugo**: Static site generator is permitted under constitution ("Static site generators using only Markdown → HTML transformation"). Hugo is widely-available, well-documented, and generates pure static HTML/CSS/JS with no runtime dependencies. Alternative (hand-coded HTML) would violate DRY principles for 34+ camera pages. Note: Hugo must be pre-installed or distributed as offline binary before build process.
+- **cwebp**: Specialized WebP encoder command-line tool. Standard system utility, no npm installation required. Chosen over ImageMagick for superior WebP optimization.
 
 **NOTE**: Any violations must be justified in Complexity Tracking section below.
 
@@ -207,6 +207,12 @@ hawaiidiff/
   white-space: nowrap;
 }
 ```
+```html
+<!-- Apply title attribute for names >40 characters -->
+<div class="camera-name" title="{{ if gt (len .name) 40 }}{{ .name }}{{ end }}">
+  {{ .name }}
+</div>
+```
 
 **Timestamp Format** (FR-029):
 - Format string: "MMM DD, YYYY, h:mm A"
@@ -333,16 +339,7 @@ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 ```
 
-**Placeholder Layout** (FR-046):
-```html
-<div class="image-placeholder">
-  <svg class="icon-camera-off" width="48" height="48"></svg>
-  <p style="font-size: 16px;">Image unavailable</p>
-  <div class="camera-metadata"><!-- name, direction --></div>
-</div>
-```
-
-**Skeleton Loader** (FR-047):
+**Skeleton Loader** (FR-046):
 ```css
 .skeleton {
   background: linear-gradient(90deg, #2a2a2a 0%, #3a3a3a 50%, #2a2a2a 100%);
@@ -357,9 +354,9 @@ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 ```
 
-### Error State Implementation (maps to FR-048 through FR-051)
+### Error State Implementation (maps to FR-004, FR-005, FR-006, FR-047, FR-048)
 
-**Unavailable Text Styling** (FR-048, FR-049):
+**Unavailable Text Styling** (FR-005, FR-006):
 ```css
 .unavailable {
   font-style: italic;
@@ -368,14 +365,23 @@ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 ```
 
-**No Snapshots Message** (FR-050):
+**Image Placeholder** (FR-004):
+```html
+<div class="image-placeholder">
+  <svg class="icon-camera-off" width="48" height="48"></svg>
+  <p style="font-size: 16px; font-style: italic; color: #808080;">Image unavailable</p>
+  <div class="camera-metadata"><!-- name, direction --></div>
+</div>
+```
+
+**No Snapshots Message** (FR-047):
 ```html
 {{ if eq (len $snapshots) 0 }}
   <p class="no-snapshots">No previous snapshots available</p>
 {{ end }}
 ```
 
-**Grid Structure Maintenance** (FR-051):
+**Grid Structure Maintenance** (FR-048):
 - Grid uses `display: grid` which maintains structure
 - Placeholder divs fill empty slots
 - CSS: `min-height: 400px;` prevents collapse
