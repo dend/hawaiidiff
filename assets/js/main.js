@@ -254,22 +254,35 @@ function initCompactHeader() {
   
   const siteHeaderHeight = siteHeader.offsetHeight;
   let isCompact = false;
+  let ticking = false;
   
   // Set the sticky position to be below the site header
   detailHeader.style.top = `${siteHeaderHeight}px`;
   
-  window.addEventListener('scroll', function() {
+  // Threshold: need to scroll this much past the header to trigger compact
+  const threshold = 100;
+  
+  function updateHeader() {
     const currentScrollY = window.scrollY;
     
-    // If scrolled past the site header, make compact
-    if (currentScrollY > siteHeaderHeight && !isCompact) {
+    // If scrolled past the threshold, make compact
+    if (currentScrollY > (siteHeaderHeight + threshold) && !isCompact) {
       detailHeader.classList.add('compact');
       isCompact = true;
     } 
-    // If scrolled back to show site header, expand
+    // If scrolled back above the threshold, expand
     else if (currentScrollY <= siteHeaderHeight && isCompact) {
       detailHeader.classList.remove('compact');
       isCompact = false;
+    }
+    
+    ticking = false;
+  }
+  
+  window.addEventListener('scroll', function() {
+    if (!ticking) {
+      window.requestAnimationFrame(updateHeader);
+      ticking = true;
     }
   });
 }
