@@ -149,31 +149,31 @@
         "id": "irtf-bunker-c166-mauna-loa",
         "name": "IRTF Bunker C166 Mauna Loa",
         "direction": "S",
-        "uri": "https://irtfweb.ifa.hawaii.edu/~irtfcameras/c166/latests.jpg"
+        "uri": "https://irtfweb.ifa.hawaii.edu/~irtfcameras/c166/latest.jpg"
     },
     {
         "id": "irtf-bunker-c161-waimea-cam-nw",
         "name": "IRTF Bunker C161 WaimeaCamNW",
         "direction": "N",
-        "uri": "https://irtfweb.ifa.hawaii.edu/~irtfcameras/c161/latests.jpg"
+        "uri": "https://irtfweb.ifa.hawaii.edu/~irtfcameras/c161/latest.jpg"
     },
     {
         "id": "irtf-bunker-c168-bunker-door",
         "name": "IRTF Bunker C168 BunkerDoor",
         "direction": "E",
-        "uri": "https://irtfweb.ifa.hawaii.edu/~irtfcameras/c168/latests.jpg"
+        "uri": "https://irtfweb.ifa.hawaii.edu/~irtfcameras/c168/latest.jpg"
     },
     {
         "id": "irtf-bunker-c160-frontdoor-ptz",
         "name": "IRTF Bunker C160 FrontDoor (PTZ)",
         "direction": "W",
-        "uri": "https://irtfweb.ifa.hawaii.edu/~irtfcameras/c160/latests.jpg"
+        "uri": "https://irtfweb.ifa.hawaii.edu/~irtfcameras/c160/latest.jpg"
     },
     {
         "id": "irtf-bunker-c159-bunkercam-ptz",
         "name": "IRTF Bunker C159 BunkerCam (PTZ)",
         "direction": "E",
-        "uri": "https://irtfweb.ifa.hawaii.edu/~irtfcameras/c159/latests.jpg"
+        "uri": "https://irtfweb.ifa.hawaii.edu/~irtfcameras/c159/latest.jpg"
     },
     {
         "id": "vlba",
