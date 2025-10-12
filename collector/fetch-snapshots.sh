@@ -3,8 +3,7 @@
 # fetch-snapshots.sh - Download and convert camera snapshots to WebP
 #
 # This script reads data/cameras.json, downloads images from each camera's URI,
-# converts them to WebP format, and maintains the 11 most recent snapshots
-# (1 current + 10 historical) per camera.
+# and converts them to WebP format. All snapshots are preserved indefinitely.
 #
 
 set -e
@@ -31,8 +30,8 @@ fi
 # Create images directory if it doesn't exist
 mkdir -p "$IMAGES_DIR"
 
-# Get current timestamp for filename
-TIMESTAMP=$(date +"%Y_%m_%d_%H_%M")
+# Get current timestamp for filename (always in Pacific Time)
+TIMESTAMP=$(TZ="America/Los_Angeles" date +"%Y_%m_%d_%H_%M")
 
 echo "Starting snapshot collection at $(date)"
 echo "Timestamp: $TIMESTAMP"
@@ -70,18 +69,6 @@ jq -c '.cameras[]' "$CAMERAS_JSON" | while read -r camera; do
             
             # Clean up temporary file
             rm -f "$TMP_FILE"
-            
-            # Maintain only the MAX_SNAPSHOTS most recent files
-            SNAPSHOT_COUNT=$(find "$CAMERA_DIR" -name "*.webp" | wc -l)
-            if [ $SNAPSHOT_COUNT -gt $MAX_SNAPSHOTS ]; then
-                echo "  Cleaning old snapshots (keeping $MAX_SNAPSHOTS most recent)"
-                # List files by modification time, oldest first, delete excess
-                find "$CAMERA_DIR" -name "*.webp" -type f -printf '%T@ %p\n' | \
-                    sort -n | \
-                    head -n -$MAX_SNAPSHOTS | \
-                    cut -d' ' -f2- | \
-                    xargs rm -f
-            fi
         else
             echo "  ✗ Error: WebP conversion failed"
             rm -f "$TMP_FILE"
