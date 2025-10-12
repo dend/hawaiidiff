@@ -1,15 +1,15 @@
-{{ partial "head.html" . }}
+{{/* Get camera data from JSON */}}
+{{ $cameraId := path.Base .RelPermalink }}
+{{ $cameraData := dict }}
+{{ range $.Site.Data.cameras.cameras }}
+    {{ if eq .id $cameraId }}
+        {{ $cameraData = . }}
+    {{ end }}
+{{ end }}
+
+{{ partial "head.html" (dict "context" . "customTitle" $cameraData.name) }}
 <body>
     {{ partial "header.html" . }}
-    
-    {{/* Get camera data from JSON */}}
-    {{ $cameraId := path.Base .RelPermalink }}
-    {{ $cameraData := dict }}
-    {{ range $.Site.Data.cameras.cameras }}
-        {{ if eq .id $cameraId }}
-            {{ $cameraData = . }}
-        {{ end }}
-    {{ end }}
     
     {{/* Get navigation data */}}
     {{ $cameras := slice }}

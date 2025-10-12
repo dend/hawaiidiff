@@ -1,9 +1,15 @@
+{{ $ctx := . }}
+{{ if reflect.IsMap . }}
+  {{ if .context }}
+    {{ $ctx = .context }}
+  {{ end }}
+{{ end }}
 <!DOCTYPE html>
-<html lang="{{ .Site.LanguageCode }}">
+<html lang="{{ $ctx.Site.LanguageCode }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
+    <title>{{ if $ctx.IsHome }}{{ $ctx.Site.Title }}{{ else }}{{ if and (reflect.IsMap .) .customTitle }}{{ .customTitle }}{{ else }}{{ $ctx.Title }}{{ end }} - {{ $ctx.Site.Title }}{{ end }}</title>
     {{ $css := resources.Get "css/main.css" | minify }}
     <link rel="stylesheet" href="{{ $css.RelPermalink }}">
 </head>

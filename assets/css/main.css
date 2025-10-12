@@ -681,26 +681,8 @@ main {
 .snapshot-history {
   display: flex;
   gap: 12px;
-  overflow-x: auto;
-  padding-bottom: 16px;
-}
-
-.snapshot-history::-webkit-scrollbar {
-  height: 8px;
-}
-
-.snapshot-history::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-  border-radius: 4px;
-}
-
-.snapshot-history::-webkit-scrollbar-thumb {
-  background: var(--border);
-  border-radius: 4px;
-}
-
-.snapshot-history::-webkit-scrollbar-thumb:hover {
-  background: var(--accent);
+  row-gap: 24px;
+  flex-wrap: wrap;
 }
 
 .snapshot-thumbnail-wrapper {
@@ -711,8 +693,8 @@ main {
 }
 
 .snapshot-thumbnail {
-  width: 160px;
-  height: 160px;
+  width: 200px;
+  height: 200px;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 4px;
@@ -736,7 +718,7 @@ main {
   font-size: 14px;
   color: var(--text-secondary);
   text-align: left;
-  width: 160px;
+  width: 200px;
   line-height: 1.2;
   padding-left: 2px;
   box-sizing: border-box;
@@ -913,12 +895,12 @@ main {
   }
   
   .snapshot-thumbnail {
-    width: 140px;
-    height: 140px;
+    width: 160px;
+    height: 160px;
   }
   
   .snapshot-timestamp {
-    max-width: 140px;
+    width: 160px;
     font-size: 12px;
   }
 }

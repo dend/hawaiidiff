@@ -1,6 +1,6 @@
 baseURL = '/'
 languageCode = 'en-us'
-title = 'Mauna Kea Camera Snapshots'
+title = 'HawaiiDiff'
 
 [permalinks]
   cameras = '/cameras/:slug/'
