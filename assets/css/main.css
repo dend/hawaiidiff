@@ -1198,21 +1198,24 @@ main {
 .filter-toggle[aria-expanded="true"] .chevron-up { display: inline-block; }
 
 /* No Results Message */
+
+/* No Results Message - match grid width */
 .no-results {
-  max-width: 600px;
+  width: 100%;
+  max-width: 1696px; /* 5 cards */
   margin: 4rem auto;
-  padding: 3rem 2rem;
+  padding: 2rem 1.5rem;
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: 8px;
   text-align: center;
 }
 
-.no-results .icon-no-results {
-  margin: 0 auto 1.5rem;
-  opacity: 0.5;
-  color: var(--text-secondary);
-}
+@media (max-width: 1750px) { .no-results { max-width: 1352px; } }
+@media (max-width: 1406px) { .no-results { max-width: 1008px; } }
+@media (max-width: 1062px) { .no-results { max-width: 664px; } }
+@media (max-width: 767px) and (min-width: 696px) { .no-results { max-width: 656px; } }
+@media (max-width: 695px) { .no-results { max-width: 320px; } }
 
 .no-results-message {
   font-size: 1.25rem;
