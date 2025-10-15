@@ -9,8 +9,8 @@
     "cameras": {
       "description": "Array of camera objects representing physical cameras on Mauna Kea",
       "type": "array",
-      "minItems": 33,
-      "maxItems": 33,
+      "minItems": 34,
+      "maxItems": 34,
       "items": {
         "type": "object",
         "required": ["id", "name", "uri"],

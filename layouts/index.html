@@ -3,7 +3,10 @@
     {{ partial "header.html" . }}
     
     <main class="container">
-        <div class="camera-grid">
+        {{/* Include filter controls */}}
+        {{ partial "filters.html" . }}
+        
+        <div class="camera-grid" id="camera-grid">
             {{ $cameras := partial "camera-data.html" . }}
             {{ range $cameras }}
                 {{/* Find latest snapshot for this camera - move before link */}}
@@ -26,7 +29,10 @@
                 {{ end }}
                 
                 <a href="/cameras/{{ .id }}/" class="camera-card-link" aria-label="Camera: {{ .name }}, Direction: {{ if .direction }}{{ .direction }}{{ else }}Direction unavailable{{ end }}, Last updated: {{ if $latestFilename }}see timestamp{{ else }}Timestamp unavailable{{ end }}" tabindex="0">
-                <article class="camera-card">
+                <article class="camera-card" 
+                         data-camera-id="{{ .id }}" 
+                         data-camera-name="{{ .name }}" 
+                         data-camera-direction="{{ .direction }}">
                     <div class="card-content">
                         
                         {{ if $latestSnapshot }}

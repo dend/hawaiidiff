@@ -1,0 +1,52 @@
+{{/* Filter Controls Partial - Search and Direction Filters */}}
+<div class="filter-container">
+    {{/* Mobile Filter Toggle Button */}}
+    <button id="filter-toggle" class="filter-toggle" aria-expanded="false" aria-label="Toggle filters">
+        <svg class="icon-filter" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 6h18M8 12h8M11 18h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span>Filters</span>
+        <!-- Down chevron (default/collapsed) -->
+        <svg class="chevron chevron-down" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <!-- Up chevron (expanded) -->
+        <svg class="chevron chevron-up" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M18 15l-6-6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </button>
+
+    {{/* Filter Panel - Collapsible on Mobile */}}
+    <div class="filter-panel">
+        {{/* Search Input */}}
+        <div class="filter-group">
+            <label for="camera-search" class="filter-label">Search Cameras</label>
+            <input 
+                type="text" 
+                id="camera-search" 
+                class="filter-search"
+                placeholder="Type to search..." 
+                aria-label="Search telescope cameras by name"
+            />
+        </div>
+
+        {{/* Direction Toggle Buttons Container */}}
+        <div class="filter-group">
+            <span class="filter-label">Filter by Direction</span>
+            <div 
+                id="direction-filter" 
+                class="direction-filter-container"
+                role="group"
+                aria-label="Filter by camera direction"
+            >
+                {{/* Toggle buttons will be generated dynamically by JavaScript */}}
+            </div>
+        </div>
+    </div>
+
+    {{/* No Results Message */}}
+    <div id="no-results" class="no-results" style="display: none;" aria-live="polite">
+        <p class="no-results-message">No cameras match your filters.</p>
+        <button id="clear-filters" class="btn-clear-filters">Clear all filters</button>
+    </div>
+</div>
