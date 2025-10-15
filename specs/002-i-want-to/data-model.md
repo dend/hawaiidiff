@@ -77,10 +77,10 @@ This feature uses existing data structures from the HawaiiDiff camera system. No
   - **Default**: "" (empty string)
   - **Validation**: Any string (no sanitization needed, used only for comparison)
   - **State**: Updated on every `input` event with 100ms debounce
-- `selectedDirections` (Set<string>): Currently selected direction values
+- `selectedDirections` (Set<string>): Currently active direction toggle buttons
   - **Default**: Empty Set (no filters active)
   - **Validation**: Values must exist in available directions from camera data
-  - **State**: Updated on `change` event from direction dropdown
+  - **State**: Updated on `click` event from direction toggle buttons
 
 **State Transitions**:
 
@@ -99,16 +99,19 @@ User selects direction "N":
   searchTerm = "CFHT"
   selectedDirections = Set("N")
   → Cameras matching "CFHT" AND direction "N" visible
+  → "N" toggle button shows active state
 
 User clears search:
   searchTerm = ""
   selectedDirections = Set("N")
   → Only cameras with direction "N" visible
+  → "N" toggle button remains in active state
 
 User clicks "Clear all filters":
   searchTerm = ""
   selectedDirections = Set()
   → All cameras visible (back to initial state)
+  → All toggle buttons return to inactive state
 
 Page refresh:
   → Reset to initial state (FR-015)
@@ -124,9 +127,8 @@ const filterState = {
 
 function updateFilterState() {
   filterState.searchTerm = searchInput.value;
-  filterState.selectedDirections = new Set(
-    Array.from(directionSelect.selectedOptions).map(opt => opt.value)
-  );
+  // Toggle buttons update selectedDirections on click
+  // Add/remove direction from Set based on button state
   applyFilters();
 }
 ```
@@ -161,7 +163,7 @@ function getVisibleCameras(allCameras, filterState) {
 
 **Type**: Array<string>  
 **Description**: List of all unique direction values from camera data  
-**Computation**: Computed once on page load, used to populate direction dropdown
+**Computation**: Computed once on page load, used to generate direction toggle buttons
 
 **Algorithm**:
 ```javascript
@@ -182,15 +184,15 @@ function getUniqueDirections(cameras) {
 Page Load:
   1. Hugo generates HTML with camera cards from data/cameras.json
   2. JavaScript reads DOM to build camera array
-  3. Extract unique directions → populate dropdown options
+  3. Extract unique directions → generate toggle buttons dynamically
   4. Initialize filter state (empty)
-  5. Attach event listeners to filter controls
+  5. Attach event listeners to filter controls (search input, toggle buttons)
 
 User Interaction:
-  1. User types in search OR selects direction
-  2. Event handler updates filter state
+  1. User types in search OR clicks direction toggle button
+  2. Event handler updates filter state (add/remove from Set for toggles)
   3. Compute visible cameras from all cameras + filter state
-  4. Update DOM: show/hide camera cards
+  4. Update DOM: show/hide camera cards, update toggle button states
   5. Update no results message if needed
 
 Page Refresh:
@@ -206,7 +208,7 @@ Page Refresh:
 
 ### Direction Selection Validation
 - **Valid values**: Only directions that exist in camera data can be selected
-- **Enforcement**: Dropdown options are dynamically populated from data, preventing invalid selections
+- **Enforcement**: Toggle buttons are dynamically generated from data, preventing invalid selections
 - **Multiple selection**: Allowed per FR-007, no maximum limit
 
 ### Camera Data Validation (Build-Time)
@@ -232,7 +234,7 @@ Page Refresh:
 
 ### Update Frequency
 - **Search input**: Up to 10 events/second during typing (debounced to 100ms)
-- **Direction selection**: 1-2 events/second maximum (user clicking checkboxes)
+- **Direction selection**: 1-2 events/second maximum (user clicking toggle buttons)
 - **Filter computation**: <15ms per update (measured in research phase)
 
 ## Edge Cases
@@ -258,8 +260,8 @@ Page Refresh:
 
 ### Non-Standard Directions
 - **Scenario**: Camera has unusual direction value (e.g., "Up", "Hilo", "ESE")
-- **Behavior**: Displayed as-is in dropdown per FR-013, treated same as cardinal directions
+- **Behavior**: Displayed as-is in toggle button per FR-013, treated same as cardinal directions
 
 ## Summary
 
-This feature requires **no changes to existing data structures**. It operates entirely on the existing `cameras.json` data with transient client-side Filter State. Data flow is unidirectional (data → filter state → visible cameras → DOM updates), with no persistence or mutation of source data. All validation happens at build time via existing JSON schema; runtime validation is minimal as dropdown options are constrained to valid values from the data.
+This feature requires **no changes to existing data structures**. It operates entirely on the existing `cameras.json` data with transient client-side Filter State. Data flow is unidirectional (data → filter state → visible cameras → DOM updates), with no persistence or mutation of source data. All validation happens at build time via existing JSON schema; runtime validation is minimal as toggle buttons are constrained to valid values from the data.

@@ -7,7 +7,7 @@
 
 ## Summary
 
-Add client-side search and filtering capabilities to the main landing page, allowing users to search telescope cameras by name and filter by direction. Implementation uses vanilla JavaScript for real-time filtering of the existing Hugo-generated camera grid, with responsive design that adapts filter controls for mobile screens. No new dependencies required - extends existing static site architecture.
+Add client-side search and filtering capabilities to the main landing page, allowing users to search telescope cameras by name and filter by direction. Implementation uses vanilla JavaScript for real-time filtering of the existing Hugo-generated camera grid, with toggle buttons for direction filters and responsive design that adapts filter controls for mobile screens. No new dependencies required - extends existing static site architecture.
 
 ## Technical Context
 
@@ -70,20 +70,20 @@ specs/002-i-want-to/
 ```
 assets/
 ├── css/
-│   └── main.css         # Add filter UI styles, responsive mobile styles
+│   └── main.css         # Add filter UI styles, toggle button styles, responsive mobile styles
 └── js/
-    └── main.js          # Add filter logic (search, direction filtering, mobile toggle)
+    └── main.js          # Add filter logic (search, direction toggle handling, mobile toggle)
 
 layouts/
 ├── index.html           # Add filter UI controls above camera grid
 └── partials/
-    └── filters.html     # New: Filter controls partial (search box, direction dropdown)
+    └── filters.html     # New: Filter controls partial (search box, direction toggle buttons)
 
 data/
 └── cameras.json         # Existing: Camera data (no changes needed)
 ```
 
-**Structure Decision**: Extends existing Hugo static site structure. No new directories needed. Filter UI added to layouts, JavaScript filtering logic added to existing main.js, CSS for filter controls added to existing main.css. Follows established pattern of client-side enhancements to static Hugo-generated content.
+**Structure Decision**: Extends existing Hugo static site structure. No new directories needed. Filter UI added to layouts, JavaScript filtering logic added to existing main.js, CSS for filter controls (including toggle button styles) added to existing main.css. Follows established pattern of client-side enhancements to static Hugo-generated content.
 
 ## Complexity Tracking
 

@@ -330,3 +330,376 @@ function initKeyboardNavigation() {
     }
   });
 }
+
+/**
+ * ============================================
+ * CAMERA FILTER MODULE
+ * ============================================
+ * Client-side search and direction filtering for telescope cameras
+ */
+
+// Filter state management
+const filterState = {
+  searchTerm: '',
+  selectedDirections: new Set()
+};
+
+// Cached DOM references
+let cameraElements = [];
+let searchInput = null;
+let directionContainer = null;
+let noResultsElement = null;
+let clearFiltersButton = null;
+let filterToggle = null;
+let cameraGrid = null;
+
+/**
+ * Initialize the camera filter system
+ * Called on DOMContentLoaded
+ */
+function initCameraFilter() {
+  try {
+    // Cache DOM element references
+    searchInput = document.getElementById('camera-search');
+    directionContainer = document.getElementById('direction-filter');
+    noResultsElement = document.getElementById('no-results');
+    clearFiltersButton = document.getElementById('clear-filters');
+    filterToggle = document.getElementById('filter-toggle');
+    cameraGrid = document.getElementById('camera-grid');
+
+    // Check if we're on a page with filters (main landing page)
+    if (!searchInput || !directionContainer || !cameraGrid) {
+      return; // Not on the landing page, skip filter initialization
+    }
+
+    // Extract camera data from DOM
+    cameraElements = getCameraElements();
+
+    if (cameraElements.length === 0) {
+      console.warn('No camera elements found');
+      return;
+    }
+
+    // Generate direction toggle buttons
+    createDirectionToggleButtons(cameraElements);
+
+    // Attach event listeners
+    searchInput.addEventListener('input', debounce(handleSearchInput, 100));
+    
+    if (clearFiltersButton) {
+      clearFiltersButton.addEventListener('click', handleClearFilters);
+    }
+
+    // Mobile filter toggle
+    if (filterToggle) {
+      filterToggle.addEventListener('click', handleFilterToggle);
+    }
+
+    // Initialize filter state (all cameras visible)
+    filterState.searchTerm = '';
+    filterState.selectedDirections = new Set();
+  } catch (error) {
+    console.error('Error initializing camera filter:', error);
+    // Fail gracefully - all cameras remain visible
+  }
+}
+
+/**
+ * Get all camera elements from DOM with cached data
+ * @returns {Array} Array of camera objects with DOM element references
+ */
+function getCameraElements() {
+  const cards = document.querySelectorAll('.camera-card[data-camera-id]');
+  return Array.from(cards).map(card => ({
+    id: card.getAttribute('data-camera-id'),
+    name: card.getAttribute('data-camera-name') || '',
+    direction: card.getAttribute('data-camera-direction') || null,
+    element: card.closest('.camera-card-link') || card // Get the link wrapper for hiding
+  }));
+}
+
+/**
+ * Extract unique direction values from cameras
+ * Excludes null/undefined directions, returns sorted array
+ * @param {Array} cameras - Array of camera objects
+ * @returns {Array} Unique direction values, sorted alphabetically
+ */
+function getUniqueDirections(cameras) {
+  const directions = new Set();
+  cameras.forEach(camera => {
+    if (camera.direction && camera.direction.trim() !== '') {
+      directions.add(camera.direction);
+    }
+  });
+  return Array.from(directions).sort();
+}
+
+/**
+ * Create and populate direction toggle buttons dynamically
+ * @param {Array} cameras - Array of camera objects
+ */
+function createDirectionToggleButtons(cameras) {
+  if (!directionContainer) return;
+
+  const uniqueDirections = getUniqueDirections(cameras);
+  
+  // Clear existing buttons
+  directionContainer.innerHTML = '';
+
+  // Create toggle button for each direction
+  uniqueDirections.forEach(direction => {
+    const button = document.createElement('button');
+    button.className = 'direction-toggle';
+    button.setAttribute('data-direction', direction);
+    button.setAttribute('aria-pressed', 'false');
+    button.textContent = direction;
+    
+    // Attach click handler
+    button.addEventListener('click', (event) => handleDirectionToggle(event, direction));
+    
+    directionContainer.appendChild(button);
+  });
+}
+
+/**
+ * Debounce function for search input
+ * Delays execution until user stops typing
+ * @param {Function} func - Function to debounce
+ * @param {number} delay - Delay in milliseconds
+ * @returns {Function} Debounced function
+ */
+function debounce(func, delay) {
+  let timeoutId;
+  return function(...args) {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func.apply(this, args), delay);
+  };
+}
+
+/**
+ * Get current filter state
+ * @returns {Object} Current search term and selected directions
+ */
+function getFilterState() {
+  return {
+    searchTerm: filterState.searchTerm,
+    selectedDirections: new Set(filterState.selectedDirections)
+  };
+}
+
+/**
+ * Update filter state and re-apply filters
+ * @param {Object} updates - Properties to update
+ */
+function updateFilterState(updates) {
+  if (updates.searchTerm !== undefined) {
+    filterState.searchTerm = updates.searchTerm;
+  }
+  if (updates.selectedDirections !== undefined) {
+    filterState.selectedDirections = updates.selectedDirections;
+  }
+  applyFilters();
+}
+
+/**
+ * Clear all active filters
+ * Resets search term, direction selections, and toggle button states
+ */
+function clearAllFilters() {
+  // Reset search input
+  if (searchInput) {
+    searchInput.value = '';
+  }
+
+  // Reset filter state
+  filterState.searchTerm = '';
+  filterState.selectedDirections = new Set();
+
+  // Update toggle button states
+  updateToggleButtonState(filterState.selectedDirections);
+
+  // Re-apply filters (shows all cameras)
+  applyFilters();
+}
+
+/**
+ * Check if a camera matches current filter state
+ * @param {Object} camera - Camera object
+ * @param {Object} state - Filter state
+ * @returns {boolean} True if camera matches all active filters
+ */
+function matchesFilters(camera, state) {
+  const searchMatch = matchesSearch(camera, state.searchTerm);
+  const directionMatch = matchesDirection(camera, state.selectedDirections);
+  return searchMatch && directionMatch;
+}
+
+/**
+ * Check if a camera matches search term
+ * Case-insensitive partial name matching
+ * @param {Object} camera - Camera object
+ * @param {string} searchTerm - Search input value
+ * @returns {boolean} True if camera name contains search term
+ */
+function matchesSearch(camera, searchTerm) {
+  if (!searchTerm || searchTerm.trim() === '') {
+    return true; // No search filter active
+  }
+  return camera.name.toLowerCase().includes(searchTerm.toLowerCase());
+}
+
+/**
+ * Check if a camera matches direction filters
+ * Returns true if no directions selected OR camera direction in selection
+ * @param {Object} camera - Camera object
+ * @param {Set} selectedDirections - Selected direction values
+ * @returns {boolean} True if camera matches direction filter
+ */
+function matchesDirection(camera, selectedDirections) {
+  if (selectedDirections.size === 0) {
+    return true; // No direction filter active
+  }
+  // Cameras with missing direction are excluded when direction filter is active
+  return camera.direction && selectedDirections.has(camera.direction);
+}
+
+/**
+ * Apply current filter state to all cameras
+ * Shows/hides camera cards based on search and direction filters
+ */
+function applyFilters() {
+  let visibleCount = 0;
+
+  cameraElements.forEach(camera => {
+    if (matchesFilters(camera, filterState)) {
+      showCamera(camera.element);
+      visibleCount++;
+    } else {
+      hideCamera(camera.element);
+    }
+  });
+
+  // Update no results message
+  updateNoResultsMessage(visibleCount);
+}
+
+/**
+ * Show a camera card
+ * @param {HTMLElement} cameraElement - Camera card DOM element
+ */
+function showCamera(cameraElement) {
+  if (cameraElement) {
+    cameraElement.style.display = '';
+  }
+}
+
+/**
+ * Hide a camera card
+ * @param {HTMLElement} cameraElement - Camera card DOM element
+ */
+function hideCamera(cameraElement) {
+  if (cameraElement) {
+    cameraElement.style.display = 'none';
+  }
+}
+
+/**
+ * Update visibility of no-results message
+ * Shows message if no cameras match filters, hides otherwise
+ * @param {number} visibleCount - Number of visible cameras
+ */
+function updateNoResultsMessage(visibleCount) {
+  if (!noResultsElement) return;
+
+  if (visibleCount === 0) {
+    noResultsElement.style.display = 'block';
+  } else {
+    noResultsElement.style.display = 'none';
+  }
+}
+
+/**
+ * Update visual state of direction toggle buttons
+ * Adds/removes active class based on current filter state
+ * @param {Set} selectedDirections - Currently selected directions
+ */
+function updateToggleButtonState(selectedDirections) {
+  if (!directionContainer) return;
+
+  const buttons = directionContainer.querySelectorAll('.direction-toggle');
+  buttons.forEach(button => {
+    const direction = button.getAttribute('data-direction');
+    if (selectedDirections.has(direction)) {
+      button.classList.add('active');
+      button.setAttribute('aria-pressed', 'true');
+    } else {
+      button.classList.remove('active');
+      button.setAttribute('aria-pressed', 'false');
+    }
+  });
+}
+
+/**
+ * Handle search input event
+ * Debounced to 100ms for performance
+ * @param {Event} event - Input event from search field
+ */
+function handleSearchInput(event) {
+  updateFilterState({ searchTerm: event.target.value });
+}
+
+/**
+ * Handle direction toggle button click event
+ * Toggles direction in/out of selectedDirections Set
+ * @param {Event} event - Click event from toggle button
+ * @param {string} direction - Direction value for this button
+ */
+function handleDirectionToggle(event, direction) {
+  const newSelectedDirections = new Set(filterState.selectedDirections);
+  
+  if (newSelectedDirections.has(direction)) {
+    // Deactivate - remove from set
+    newSelectedDirections.delete(direction);
+  } else {
+    // Activate - add to set
+    newSelectedDirections.add(direction);
+  }
+
+  updateFilterState({ selectedDirections: newSelectedDirections });
+  updateToggleButtonState(newSelectedDirections);
+}
+
+/**
+ * Handle clear filters button click
+ * Resets all filters to initial state
+ * @param {Event} event - Click event from clear button
+ */
+function handleClearFilters(event) {
+  if (event) {
+    event.preventDefault();
+  }
+  clearAllFilters();
+}
+
+/**
+ * Handle mobile filter toggle
+ * Shows/hides filter panel on mobile devices
+ * @param {Event} event - Click event from toggle button
+ */
+function handleFilterToggle(event) {
+  if (!filterToggle) return;
+
+  const isExpanded = filterToggle.getAttribute('aria-expanded') === 'true';
+  filterToggle.setAttribute('aria-expanded', !isExpanded);
+  
+  // Update aria-label for accessibility
+  filterToggle.setAttribute('aria-label', !isExpanded ? 'Hide filters' : 'Show filters');
+}
+
+// Initialize camera filter on page load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initCameraFilter);
+} else {
+  initCameraFilter();
+}
+

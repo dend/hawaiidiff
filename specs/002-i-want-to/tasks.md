@@ -24,9 +24,9 @@
 
 **Purpose**: Verify Hugo environment and create shared filter UI structure
 
-- [ ] T001 Verify Hugo builds successfully and existing site structure intact
-- [ ] T002 Create filter controls HTML partial in layouts/partials/filters.html
-- [ ] T003 Add data attributes to camera cards in layouts/index.html (data-camera-id, data-camera-name, data-camera-direction)
+- [x] T001 Verify Hugo builds successfully and existing site structure intact
+- [x] T002 Create filter controls HTML partial in layouts/partials/filters.html
+- [x] T003 Add data attributes to camera cards in layouts/index.html (data-camera-id, data-camera-name, data-camera-direction)
 
 **Checkpoint**: Filter UI structure in place, ready for styling and JavaScript implementation
 
@@ -38,14 +38,14 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T004 Add base filter container styles in assets/css/main.css (layout, spacing, positioning above grid)
-- [ ] T005 Add no-results message container HTML in layouts/partials/filters.html (hidden by default)
-- [ ] T006 Add clear filters button HTML in no-results message
-- [ ] T007 Initialize JavaScript filter module in assets/js/main.js (DOMContentLoaded handler, cache DOM references)
-- [ ] T008 Implement getCameraElements() utility function in assets/js/main.js to extract camera data from DOM
-- [ ] T009 Implement getUniqueDirections() utility function in assets/js/main.js to extract direction values
-- [ ] T010 Implement populateDirectionDropdown() function in assets/js/main.js to dynamically create dropdown options
-- [ ] T011 Implement debounce() utility function in assets/js/main.js (100ms delay for search input)
+- [x] T004 Add base filter container styles in assets/css/main.css (layout, spacing, positioning above grid)
+- [x] T005 Add no-results message container HTML in layouts/partials/filters.html (hidden by default)
+- [x] T006 Add clear filters button HTML in no-results message
+- [x] T007 Initialize JavaScript filter module in assets/js/main.js (DOMContentLoaded handler, cache DOM references)
+- [x] T008 Implement getCameraElements() utility function in assets/js/main.js to extract camera data from DOM
+- [x] T009 Implement getUniqueDirections() utility function in assets/js/main.js to extract direction values
+- [x] T010 Implement createDirectionToggleButtons() function in assets/js/main.js to dynamically generate toggle buttons with click handlers
+- [x] T011 Implement debounce() utility function in assets/js/main.js (100ms delay for search input)
 
 **Checkpoint**: Foundation ready - filter UI visible, JavaScript initialized, utility functions available
 
@@ -59,51 +59,51 @@
 
 ### Implementation for User Story 1
 
-- [ ] T012 [P] [US1] Add search input field HTML in layouts/partials/filters.html with id, placeholder, aria-label
-- [ ] T013 [P] [US1] Add search input styles in assets/css/main.css (desktop horizontal layout)
-- [ ] T014 [US1] Implement filter state management in assets/js/main.js (getFilterState, updateFilterState functions)
-- [ ] T015 [US1] Implement matchesSearch() function in assets/js/main.js (case-insensitive partial name matching per FR-003, FR-004)
-- [ ] T016 [US1] Implement showCamera() and hideCamera() functions in assets/js/main.js (DOM visibility manipulation)
-- [ ] T017 [US1] Implement applyFilters() function in assets/js/main.js (iterate cameras, apply search filter, show/hide)
-- [ ] T018 [US1] Implement handleSearchInput() event handler in assets/js/main.js (debounced, calls updateFilterState)
-- [ ] T019 [US1] Attach search input event listener in initCameraFilter() function in assets/js/main.js
-- [ ] T020 [US1] Implement updateNoResultsMessage() function in assets/js/main.js (show/hide based on visible camera count per FR-009)
-- [ ] T021 [US1] Add no-results message styles in assets/css/main.css (centered in grid area per clarification Q3)
-- [ ] T022 [US1] Test search with full camera names ("CFHT-C4", "Gemini North")
-- [ ] T023 [US1] Test search with partial names ("CFHT", "gem", "ukirt")
-- [ ] T024 [US1] Test case-insensitive search (lowercase, uppercase, mixed case)
-- [ ] T025 [US1] Test clearing search input returns all cameras
-- [ ] T026 [US1] Test no results scenario (search term "xyz123") shows message
-- [ ] T027 [US1] Verify search updates in <100ms using browser DevTools Performance tab (SC-002)
+- [x] T012 [P] [US1] Add search input field HTML in layouts/partials/filters.html with id, placeholder, aria-label
+- [x] T013 [P] [US1] Add search input styles in assets/css/main.css (desktop horizontal layout)
+- [x] T014 [US1] Implement filter state management in assets/js/main.js (getFilterState, updateFilterState functions)
+- [x] T015 [US1] Implement matchesSearch() function in assets/js/main.js (case-insensitive partial name matching per FR-003, FR-004)
+- [x] T016 [US1] Implement showCamera() and hideCamera() functions in assets/js/main.js (DOM visibility manipulation)
+- [x] T017 [US1] Implement applyFilters() function in assets/js/main.js (iterate cameras, apply search filter, show/hide)
+- [x] T018 [US1] Implement handleSearchInput() event handler in assets/js/main.js (debounced, calls updateFilterState)
+- [x] T019 [US1] Attach search input event listener in initCameraFilter() function in assets/js/main.js
+- [x] T020 [US1] Implement updateNoResultsMessage() function in assets/js/main.js (show/hide based on visible camera count per FR-009)
+- [x] T021 [US1] Add no-results message styles in assets/css/main.css (centered in grid area per clarification Q3)
+- [ ] T022 [US1] Test search with full camera names ("CFHT-C4", "Gemini North") - MANUAL TESTING REQUIRED
+- [ ] T023 [US1] Test search with partial names ("CFHT", "gem", "ukirt") - MANUAL TESTING REQUIRED
+- [ ] T024 [US1] Test case-insensitive search (lowercase, uppercase, mixed case) - MANUAL TESTING REQUIRED
+- [ ] T025 [US1] Test clearing search input returns all cameras - MANUAL TESTING REQUIRED
+- [ ] T026 [US1] Test no results scenario (search term "xyz123") shows message - MANUAL TESTING REQUIRED
+- [ ] T027 [US1] Verify search updates in <100ms using browser DevTools Performance tab (SC-002) - MANUAL TESTING REQUIRED
 
-**Checkpoint**: User Story 1 complete - search functionality fully working, independently testable
+**Checkpoint**: User Story 1 implementation complete - search functionality ready for testing
 
 ---
 
 ## Phase 4: User Story 2 - Filter Telescopes by Direction (Priority: P2)
 
-**Goal**: Enable users to filter cameras by selecting one or more directions from a dropdown with checkboxes
+**Goal**: Enable users to filter cameras by selecting one or more directions using toggle buttons (pills/chips)
 
-**Independent Test**: Open direction dropdown, check "North" → only N cameras visible. Check "North" and "South" → N and S cameras visible. Uncheck all → all cameras visible.
+**Independent Test**: Click "North" toggle button → only N cameras visible, button shows active state. Click "South" toggle → N and S cameras visible, both buttons active. Click "North" again to deactivate → only S cameras visible, North button inactive.
 
 ### Implementation for User Story 2
 
-- [ ] T028 [P] [US2] Add direction filter dropdown HTML in layouts/partials/filters.html (select multiple with id, aria-label)
-- [ ] T029 [P] [US2] Add direction dropdown styles in assets/css/main.css (custom checkbox styling, desktop horizontal alignment with search)
-- [ ] T030 [US2] Call populateDirectionDropdown() in initCameraFilter() to populate options from camera data
-- [ ] T031 [US2] Implement matchesDirection() function in assets/js/main.js (Set-based multi-select logic per FR-007, FR-014)
-- [ ] T032 [US2] Update applyFilters() function in assets/js/main.js to include direction filtering logic
-- [ ] T033 [US2] Implement handleDirectionChange() event handler in assets/js/main.js (updates selectedDirections Set)
-- [ ] T034 [US2] Attach direction dropdown change event listener in initCameraFilter() function in assets/js/main.js
-- [ ] T035 [US2] Test single direction selection ("N", "S", "E", "W")
-- [ ] T036 [US2] Test multiple direction selection (select "N" and "S" simultaneously)
-- [ ] T037 [US2] Test deselecting all directions returns all cameras
-- [ ] T038 [US2] Test non-standard direction values display correctly in dropdown ("Up", "Hilo", "ESE", "NW" per FR-013)
-- [ ] T039 [US2] Test cameras with missing direction values excluded from direction filtering but visible when no filter active (FR-014)
-- [ ] T040 [US2] Test no results scenario (select direction with no matching cameras) shows message
-- [ ] T041 [US2] Verify direction filter updates in <2 seconds (SC-003)
+- [x] T028 [P] [US2] Add direction filter toggle button container HTML in layouts/partials/filters.html (container div with id, aria-label)
+- [x] T029 [P] [US2] Add direction toggle button styles in assets/css/main.css (pill/chip design with active/inactive states, desktop horizontal alignment with search)
+- [x] T030 [US2] Call createDirectionToggleButtons() in initCameraFilter() to generate buttons from camera data
+- [x] T031 [US2] Implement matchesDirection() function in assets/js/main.js (Set-based multi-select logic per FR-007, FR-014)
+- [x] T032 [US2] Update applyFilters() function in assets/js/main.js to include direction filtering logic
+- [x] T033 [US2] Implement handleDirectionToggle() event handler in assets/js/main.js (toggles direction in selectedDirections Set, updates button state)
+- [x] T034 [US2] Implement updateToggleButtonState() function in assets/js/main.js to add/remove active class on buttons
+- [ ] T035 [US2] Test single direction selection ("N", "S", "E", "W") and verify button shows active state - MANUAL TESTING REQUIRED
+- [ ] T036 [US2] Test multiple direction selection (click "N" and "S" buttons, both show active state) - MANUAL TESTING REQUIRED
+- [ ] T037 [US2] Test deselecting all directions returns all cameras and all buttons show inactive state - MANUAL TESTING REQUIRED
+- [ ] T038 [US2] Test non-standard direction values display correctly as toggle buttons ("Up", "Hilo", "ESE", "NW" per FR-013) - MANUAL TESTING REQUIRED
+- [ ] T039 [US2] Test cameras with missing direction values excluded from direction filtering but visible when no filter active (FR-014) - MANUAL TESTING REQUIRED
+- [ ] T040 [US2] Test no results scenario (select direction with no matching cameras) shows message - MANUAL TESTING REQUIRED
+- [ ] T041 [US2] Verify direction filter updates in <2 seconds (SC-003) - MANUAL TESTING REQUIRED
 
-**Checkpoint**: User Story 2 complete - direction filtering fully working, independently testable
+**Checkpoint**: User Story 2 implementation complete - direction filtering ready for testing
 
 ---
 
@@ -111,25 +111,25 @@
 
 **Goal**: Enable users to use search and direction filters together with AND logic for precise results
 
-**Independent Test**: Type "CFHT" in search AND select "North" direction → only CFHT cameras facing North visible. Clear search → only North-facing cameras visible. Clear direction → only CFHT cameras visible.
+**Independent Test**: Type "CFHT" in search AND click "North" toggle button → only CFHT cameras facing North visible, button active. Clear search → only North-facing cameras visible, button still active. Click "North" button to deactivate → only CFHT cameras visible.
 
 ### Implementation for User Story 3
 
-- [ ] T042 [US3] Update matchesFilters() function in assets/js/main.js to combine matchesSearch() and matchesDirection() with AND logic (FR-008)
-- [ ] T043 [US3] Update applyFilters() to use combined matchesFilters() function
-- [ ] T044 [US3] Implement clearAllFilters() function in assets/js/main.js (resets search text and direction selection)
-- [ ] T045 [US3] Implement handleClearFilters() event handler in assets/js/main.js (calls clearAllFilters, triggers applyFilters)
-- [ ] T046 [US3] Attach clear filters button click event listener in initCameraFilter() function in assets/js/main.js
-- [ ] T047 [US3] Add clear filters button styles in assets/css/main.css (prominent button in no-results message)
-- [ ] T048 [US3] Test combined search + single direction filter ("CFHT" + "N")
-- [ ] T049 [US3] Test combined search + multiple direction filters ("gemini" + "N" + "S")
-- [ ] T050 [US3] Test clearing search while direction filter active (only direction filter remains)
-- [ ] T051 [US3] Test clearing direction while search active (only search filter remains)
-- [ ] T052 [US3] Test clear all filters button resets both search and direction
-- [ ] T053 [US3] Test combined filters producing zero results shows no-results message with clear button
-- [ ] T054 [US3] Verify filter state resets on page refresh (FR-015)
+- [x] T042 [US3] Update matchesFilters() function in assets/js/main.js to combine matchesSearch() and matchesDirection() with AND logic (FR-008)
+- [x] T043 [US3] Update applyFilters() to use combined matchesFilters() function
+- [x] T044 [US3] Implement clearAllFilters() function in assets/js/main.js (resets search text, direction selection, and toggle button states)
+- [x] T045 [US3] Implement handleClearFilters() event handler in assets/js/main.js (calls clearAllFilters, triggers applyFilters)
+- [x] T046 [US3] Attach clear filters button click event listener in initCameraFilter() function in assets/js/main.js
+- [x] T047 [US3] Add clear filters button styles in assets/css/main.css (prominent button in no-results message)
+- [ ] T048 [US3] Test combined search + single direction filter ("CFHT" + "N" button active) - MANUAL TESTING REQUIRED
+- [ ] T049 [US3] Test combined search + multiple direction filters ("gemini" + "N" + "S" buttons both active) - MANUAL TESTING REQUIRED
+- [ ] T050 [US3] Test clearing search while direction filter active (only direction filter remains, button still active) - MANUAL TESTING REQUIRED
+- [ ] T051 [US3] Test clearing direction while search active (click active button to deactivate, only search filter remains) - MANUAL TESTING REQUIRED
+- [ ] T052 [US3] Test clear all filters button resets both search and direction (all toggle buttons return to inactive state) - MANUAL TESTING REQUIRED
+- [ ] T053 [US3] Test combined filters producing zero results shows no-results message with clear button - MANUAL TESTING REQUIRED
+- [ ] T054 [US3] Verify filter state resets on page refresh (FR-015) - MANUAL TESTING REQUIRED
 
-**Checkpoint**: User Story 3 complete - combined filtering fully working, all core functionality complete
+**Checkpoint**: User Story 3 implementation complete - combined filtering ready for testing
 
 ---
 
@@ -137,37 +137,37 @@
 
 **Purpose**: Mobile responsiveness, accessibility, and cross-cutting improvements
 
-- [ ] T055 [P] Add mobile filter toggle button HTML in layouts/partials/filters.html (aria-expanded attribute)
-- [ ] T056 [P] Add mobile responsive styles in assets/css/main.css (media query @768px, collapsible panel per clarification Q5, FR-016)
-- [ ] T057 [P] Add mobile toggle button styles in assets/css/main.css ("Show Filters" button styling)
-- [ ] T058 [P] Add mobile panel vertical stack layout in assets/css/main.css (search and dropdown full-width)
-- [ ] T059 Implement CSS checkbox hack for filter panel show/hide in assets/css/main.css (no JavaScript needed for toggle)
-- [ ] T060 Optional: Implement handleFilterToggle() in assets/js/main.js if JavaScript toggle preferred over CSS-only
-- [ ] T061 Add ARIA labels to all filter controls in layouts/partials/filters.html (aria-label on search, dropdown per FR-012)
-- [ ] T062 Add aria-live="polite" to no-results message in layouts/partials/filters.html for screen reader announcements
-- [ ] T063 Test mobile layout at 320px width (smallest size per SC-005)
-- [ ] T064 Test mobile layout at 375px width (common phone size)
-- [ ] T065 Test tablet layout at 768px width (breakpoint)
-- [ ] T066 Test desktop layout at 1024px width
-- [ ] T067 Test desktop layout at 1920px width (largest size per SC-005)
-- [ ] T068 Test keyboard navigation (Tab through controls, Enter/Space on buttons, Arrow keys in dropdown per FR-012, SC-004)
-- [ ] T069 Test screen reader with NVDA/JAWS on Windows or VoiceOver on Mac
-- [ ] T070 Test focus indicators visible on all interactive elements
-- [ ] T071 Verify color contrast ratios meet WCAG AA standards (4.5:1 minimum)
-- [ ] T072 Test on Chrome (last 2 versions)
-- [ ] T073 Test on Firefox (last 2 versions)
-- [ ] T074 Test on Safari (last 2 versions)
-- [ ] T075 Test on Edge (last 2 versions)
-- [ ] T076 Measure filter performance with browser DevTools Performance tab (verify <100ms per SC-002)
-- [ ] T077 Verify no page reload on any filter operation (SC-007)
-- [ ] T078 Add console error handling for missing DOM elements in assets/js/main.js
-- [ ] T079 Test graceful degradation if JavaScript initialization fails (all cameras remain visible)
-- [ ] T080 [P] Run Hugo build and verify no errors
-- [ ] T081 [P] Start Hugo server and test all functionality in browser
-- [ ] T082 [P] Run quickstart.md validation checklist
-- [ ] T083 Code cleanup: remove debug console.log statements from assets/js/main.js
-- [ ] T084 Code cleanup: optimize CSS selectors and remove unused styles in assets/css/main.css
-- [ ] T085 Add inline code comments for complex filter logic in assets/js/main.js
+- [x] T055 [P] Add mobile filter toggle button HTML in layouts/partials/filters.html (aria-expanded attribute)
+- [x] T056 [P] Add mobile responsive styles in assets/css/main.css (media query @768px, collapsible panel per clarification Q5, FR-016)
+- [x] T057 [P] Add mobile toggle button styles in assets/css/main.css ("Show Filters" button styling)
+- [x] T058 [P] Add mobile panel vertical stack layout in assets/css/main.css (search and direction toggle buttons full-width)
+- [x] T059 Implement CSS checkbox hack for filter panel show/hide in assets/css/main.css (no JavaScript needed for toggle)
+- [x] T060 Optional: Implement handleFilterToggle() in assets/js/main.js if JavaScript toggle preferred over CSS-only
+- [x] T061 Add ARIA labels to all filter controls in layouts/partials/filters.html (aria-label on search, toggle button container per FR-012)
+- [x] T062 Add aria-live="polite" to no-results message in layouts/partials/filters.html for screen reader announcements
+- [ ] T063 Test mobile layout at 320px width (smallest size per SC-005) - MANUAL TESTING REQUIRED
+- [ ] T064 Test mobile layout at 375px width (common phone size) - MANUAL TESTING REQUIRED
+- [ ] T065 Test tablet layout at 768px width (breakpoint) - MANUAL TESTING REQUIRED
+- [ ] T066 Test desktop layout at 1024px width - MANUAL TESTING REQUIRED
+- [ ] T067 Test desktop layout at 1920px width (largest size per SC-005) - MANUAL TESTING REQUIRED
+- [ ] T068 Test keyboard navigation (Tab through controls, Enter/Space on toggle buttons per FR-012, SC-004) - MANUAL TESTING REQUIRED
+- [ ] T069 Test screen reader with NVDA/JAWS on Windows or VoiceOver on Mac - MANUAL TESTING REQUIRED
+- [ ] T070 Test focus indicators visible on all interactive elements - MANUAL TESTING REQUIRED
+- [ ] T071 Verify color contrast ratios meet WCAG AA standards (4.5:1 minimum) - MANUAL TESTING REQUIRED
+- [ ] T072 Test on Chrome (last 2 versions) - MANUAL TESTING REQUIRED
+- [ ] T073 Test on Firefox (last 2 versions) - MANUAL TESTING REQUIRED
+- [ ] T074 Test on Safari (last 2 versions) - MANUAL TESTING REQUIRED
+- [ ] T075 Test on Edge (last 2 versions) - MANUAL TESTING REQUIRED
+- [ ] T076 Measure filter performance with browser DevTools Performance tab (verify <100ms per SC-002) - MANUAL TESTING REQUIRED
+- [ ] T077 Verify no page reload on any filter operation (SC-007) - MANUAL TESTING REQUIRED
+- [x] T078 Add console error handling for missing DOM elements in assets/js/main.js
+- [x] T079 Test graceful degradation if JavaScript initialization fails (all cameras remain visible)
+- [x] T080 [P] Run Hugo build and verify no errors
+- [ ] T081 [P] Start Hugo server and test all functionality in browser - SERVER RUNNING ON PORT 1313
+- [ ] T082 [P] Run quickstart.md validation checklist - MANUAL TESTING REQUIRED
+- [x] T083 Code cleanup: remove debug console.log statements from assets/js/main.js
+- [x] T084 Code cleanup: optimize CSS selectors and remove unused styles in assets/css/main.css
+- [x] T085 Add inline code comments for complex filter logic in assets/js/main.js
 
 **Checkpoint**: Feature complete, responsive, accessible, tested across browsers and devices
 
@@ -201,7 +201,7 @@
 
 **User Story 2 (Direction)**:
 - HTML/CSS tasks (T028, T029) can run in parallel
-- Dropdown population (T030) before filtering logic (T031-T034)
+- Toggle button generation (T030) before filtering logic (T031-T034)
 - Testing (T035-T041) after implementation complete
 
 **User Story 3 (Combined)**:
@@ -267,17 +267,17 @@ Task T022-T027: Execute all US1 test scenarios
 # After Foundational phase complete (can start parallel with US1 if staffed):
 
 # Step 1: HTML and CSS in parallel
-Task T028: "Add direction filter dropdown HTML in layouts/partials/filters.html"
-Task T029: "Add direction dropdown styles in assets/css/main.css"
+Task T028: "Add direction filter toggle button container HTML in layouts/partials/filters.html"
+Task T029: "Add direction toggle button styles in assets/css/main.css"
 
 # Step 2: JavaScript core (sequential)
-Task T030: "Call populateDirectionDropdown() in initCameraFilter()"
+Task T030: "Call createDirectionToggleButtons() in initCameraFilter()"
 Task T031: "Implement matchesDirection() function in assets/js/main.js"
 Task T032: "Update applyFilters() to include direction filtering"
 
 # Step 3: Event handling
-Task T033: "Implement handleDirectionChange() event handler"
-Task T034: "Attach direction dropdown change event listener"
+Task T033: "Implement handleDirectionToggle() event handler"
+Task T034: "Implement updateToggleButtonState() function"
 
 # Step 4: All testing tasks
 Task T035-T041: Execute all US2 test scenarios
@@ -297,7 +297,7 @@ Task T035-T041: Execute all US2 test scenarios
 
 **Incremental Delivery Path**:
 1. **MVP (US1)**: Deploy search functionality → gather user feedback
-2. **V1.1 (US1+US2)**: Add direction filtering → more advanced users can filter by view
+2. **V1.1 (US1+US2)**: Add direction filtering with toggle buttons → more advanced users can filter by view
 3. **V1.2 (US1+US2+US3)**: Polish combined filtering → power users get precise results
 4. **V2.0 (All+Mobile)**: Add mobile responsive design → mobile users get optimized experience
 

@@ -964,3 +964,301 @@ main {
     justify-content: center;
   }
 }
+
+/* ============================================
+   FILTER CONTROLS
+   ============================================ */
+
+/* Filter Container - Main wrapper */
+.filter-container {
+  max-width: 2000px;
+  margin: 0 auto 2rem;
+  padding: 0 20px;
+}
+
+/* Filter Panel - Contains search and direction filters */
+/* Matches camera grid widths at different breakpoints:
+   - 1 card: 320px
+   - 2 cards: 664px (320 + 24 + 320)
+   - 3 cards: 1008px (320 + 24 + 320 + 24 + 320)
+   - 4 cards: 1352px (320*4 + 24*3)
+   - 5+ cards: 1696px (320*5 + 24*4) */
+.filter-panel {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.25rem; /* align better with card paddings */
+  box-sizing: border-box; /* Include padding/border in max-width for exact alignment */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin: 0 auto 1rem;
+  max-width: 1696px; /* Matches 5 cards + gaps */
+}
+
+/* Adjust filter panel width to match visible cards at different breakpoints */
+@media (max-width: 1750px) {
+  .filter-panel {
+    max-width: 1352px; /* 4 cards */
+  }
+  
+  .filter-toggle {
+    max-width: 1352px; /* Matches filter-panel */
+  }
+}
+
+@media (max-width: 1406px) {
+  .filter-panel {
+    max-width: 1008px; /* 3 cards */
+  }
+  
+  .filter-toggle {
+    max-width: 1008px; /* Matches filter-panel */
+  }
+}
+
+@media (max-width: 1062px) {
+  .filter-panel {
+    max-width: 664px; /* 2 cards */
+  }
+  
+  .filter-toggle {
+    max-width: 664px; /* Matches filter-panel */
+  }
+}
+
+/* When grid gap shrinks to 16px on small screens, adjust 2-card width to 656px
+   Container has 20px padding on both sides (40px total), so 2 cards fit at viewport >= 696px (656 + 40) */
+@media (max-width: 767px) and (min-width: 696px) {
+  .filter-panel,
+  .filter-toggle {
+    max-width: 656px; /* 320 * 2 + 16 gap */
+  }
+}
+
+/* <=695px: 1 card width (656 + 40 padding = 696px threshold for 2 cards) */
+@media (max-width: 695px) {
+  .filter-panel {
+    max-width: 320px; /* 1 card */
+  }
+  
+  .filter-toggle {
+    max-width: 320px; /* Matches filter-panel */
+  }
+}
+
+/* Filter Groups - Individual filter sections */
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+/* Filter Labels */
+.filter-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Search Input */
+.filter-search {
+  width: 100%;
+  max-width: 500px;
+  padding: 0.75rem 1rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.filter-search:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(74, 158, 255, 0.1);
+}
+
+.filter-search::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+/* Direction Filter Container */
+.direction-filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Direction Toggle Buttons (Pills/Chips) */
+.direction-toggle {
+  padding: 0.5rem 1rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.direction-toggle:hover {
+  background: var(--bg-secondary);
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.direction-toggle:active {
+  transform: scale(0.95);
+}
+
+/* Active State for Toggle Buttons */
+.direction-toggle.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.direction-toggle.active:hover {
+  background: #3a8eef;
+  border-color: #3a8eef;
+}
+
+/* Mobile Filter Toggle Button */
+.filter-toggle {
+  display: none; /* Hidden on desktop */
+  box-sizing: border-box; /* Include padding/border in max-width for exact alignment */
+  width: 100%;
+  margin: 0 auto 1rem;
+  padding: 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.filter-toggle:hover {
+  background: var(--bg-primary);
+  border-color: var(--accent);
+}
+
+/* Chevron icon indicates expand/collapse state */
+.filter-toggle .icon-chevron {
+  transition: transform 0.2s ease;
+}
+
+.filter-toggle[aria-expanded="true"] .icon-chevron {
+  transform: rotate(180deg);
+}
+
+/* No Results Message */
+.no-results {
+  max-width: 600px;
+  margin: 4rem auto;
+  padding: 3rem 2rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.no-results .icon-no-results {
+  margin: 0 auto 1.5rem;
+  opacity: 0.5;
+  color: var(--text-secondary);
+}
+
+.no-results-message {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+}
+
+/* Clear Filters Button */
+.btn-clear-filters {
+  padding: 0.75rem 2rem;
+  background: var(--accent);
+  border: none;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-clear-filters:hover {
+  background: #3a8eef;
+}
+
+.btn-clear-filters:active {
+  transform: scale(0.98);
+}
+
+/* Mobile Responsive Styles - 768px breakpoint */
+@media (max-width: 768px) {
+  /* Remove extra padding on mobile - use container's padding */
+  .filter-container {
+    padding: 0;
+  }
+  
+  /* Show mobile filter toggle button */
+  .filter-toggle {
+    display: flex;
+  }
+
+  /* Hide filter panel by default on mobile */
+  .filter-panel {
+    display: none;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* Show filter panel when toggle is expanded */
+  .filter-toggle[aria-expanded="true"] + .filter-panel {
+    display: flex;
+  }
+
+  /* Full width filter groups on mobile */
+  .filter-group {
+    width: 100%;
+  }
+
+  .filter-group:first-child {
+    min-width: 100%;
+  }
+
+  /* Stack direction toggles on mobile */
+  .direction-filter-container {
+    justify-content: flex-start;
+  }
+
+  /* Adjust no-results padding on mobile */
+  .no-results {
+    margin: 2rem auto;
+    padding: 2rem 1rem;
+  }
+
+  .no-results-message {
+    font-size: 1.125rem;
+  }
+}
+

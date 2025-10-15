@@ -100,7 +100,7 @@
     {
         "id": "jcmt",
         "name": "JCMT",
-        "direction": "Variable",
+        "direction": "VAR",
         "uri": "http://www.eao.hawaii.edu/weather/images/jcmt.jpg"
     },
     {
@@ -138,6 +138,12 @@
         "name": "Keck1",
         "direction": "E",
         "uri": "https://www2.keck.hawaii.edu/realtime/webcam/kcam_1.jpg"
+    },
+    {
+        "id": "keck-2-mast",
+        "name": "Keck 2 Mast",
+        "direction": "VAR",
+        "uri": "https://www2.keck.hawaii.edu/realtime/webcam/k2Mast.jpg"
     },
     {
         "id": "keck-2-weather-mast",

@@ -10,7 +10,7 @@
 ### Session 2025-10-14
 
 - Q: Where should the search box and direction filters be positioned on the page? → A: Filters appear above the camera grid (search box + direction buttons horizontally aligned)
-- Q: How should users interact with the direction filters to select/deselect them? → A: Dropdown menu with checkboxes inside
+- Q: How should users interact with the direction filters to select/deselect them? → A: Toggle buttons (pills/chips) that can be clicked to activate/deactivate
 - Q: What should be displayed in the camera grid area when there are no matching results? → A: Centered message in grid area with "Clear all filters" action button
 - Q: What should happen to active filters when the camera data is updated? → A: Not applicable - data only updates when site is rebuilt, which causes page refresh and filter reset
 - Q: How should the filter controls behave on small mobile screens? → A: Filters collapse into a "Show Filters" button that expands a panel
@@ -45,10 +45,10 @@ A visitor wants to see only the telescope cameras facing a specific direction (e
 
 **Acceptance Scenarios**:
 
-1. **Given** the landing page displays all telescope cameras, **When** a user opens the direction filter dropdown and checks the "North" checkbox, **Then** only cameras with direction "N" are displayed
-2. **Given** the landing page displays all telescope cameras, **When** a user opens the direction filter dropdown and checks multiple direction checkboxes (e.g., "North" and "South"), **Then** cameras facing either North or South are displayed
-3. **Given** a user has selected a direction filter, **When** they uncheck it in the dropdown, **Then** all cameras are displayed again
-4. **Given** the landing page loads, **When** no filters are selected, **Then** all cameras are visible by default
+1. **Given** the landing page displays all telescope cameras, **When** a user clicks the "North" direction toggle button, **Then** only cameras with direction "N" are displayed and the button shows an active state
+2. **Given** the landing page displays all telescope cameras, **When** a user clicks multiple direction toggle buttons (e.g., "North" and "South"), **Then** cameras facing either North or South are displayed and both buttons show active states
+3. **Given** a user has selected a direction filter, **When** they click the active toggle button again to deactivate it, **Then** all cameras are displayed again and the button returns to inactive state
+4. **Given** the landing page loads, **When** no filters are selected, **Then** all cameras are visible by default and all toggle buttons are in inactive state
 5. **Given** cameras are displayed, **When** a user selects a direction with no matching cameras, **Then** a "no results found" message is displayed
 
 ---
@@ -86,8 +86,8 @@ A visitor wants to search for telescope cameras using both name search and direc
 - **FR-003**: Search MUST be case-insensitive (e.g., "cfht" matches "CFHT")
 - **FR-004**: Search MUST match partial telescope names (e.g., "gem" matches "Gemini North")
 - **FR-005**: System MUST provide direction filter controls visible on the main landing page, positioned above the camera grid and horizontally aligned with the search box
-- **FR-006**: Direction filters MUST display all unique direction values found in the camera data
-- **FR-007**: Users MUST be able to select multiple direction filters simultaneously using checkboxes within a dropdown menu
+- **FR-006**: Direction filters MUST display all unique direction values found in the camera data as toggle buttons
+- **FR-007**: Users MUST be able to select multiple direction filters simultaneously by clicking toggle buttons (each button can be in active or inactive state)
 - **FR-008**: When both search and direction filters are active, results MUST match both criteria (AND logic)
 - **FR-009**: System MUST display a "no results found" message centered in the grid area when filters produce zero matches
 - **FR-010**: System MUST provide a "Clear all filters" action button within the no results message that resets all active filters
@@ -96,13 +96,14 @@ A visitor wants to search for telescope cameras using both name search and direc
 - **FR-013**: System MUST handle non-standard direction values (e.g., "Up", "Hilo", "ESE", "NW") by displaying them as-is in filter options
 - **FR-014**: System MUST handle cameras with missing direction values by excluding them from direction-based filtering
 - **FR-015**: Filter state MUST reset when the page is refreshed (no persistence across sessions)
-- **FR-016**: On small mobile screens (below a responsive breakpoint), filter controls MUST collapse into a "Show Filters" button that expands a panel containing the search box and direction dropdown
+- **FR-016**: On small mobile screens (below a responsive breakpoint), filter controls MUST collapse into a "Show Filters" button that expands a panel containing the search box and direction toggle buttons
 
 ### Key Entities *(include if feature involves data)*
 
 - **Telescope Camera**: Represents a camera feed with properties including unique identifier, display name, direction facing, and image source. The camera data already exists in the system.
 - **Direction**: A compass direction or orientation indicator (e.g., N, S, E, W, NE, SW, Up, Hilo) associated with each camera.
 - **Filter State**: The current combination of search text and selected direction values that determine which cameras are visible.
+- **Toggle Button**: An interactive UI element that represents a direction filter option, showing active (selected) or inactive (unselected) visual states.
 
 ## Success Criteria *(mandatory)*
 
