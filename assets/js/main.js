@@ -581,6 +581,13 @@ function applyFilters() {
 
   // Update no results message
   updateNoResultsMessage(visibleCount);
+
+  // Left-align grid when any filters are active
+  const anyFiltersActive = (filterState.searchTerm && filterState.searchTerm.trim().length > 0)
+    || (filterState.selectedDirections && filterState.selectedDirections.size > 0);
+  if (cameraGrid) {
+    cameraGrid.classList.toggle('is-filtered', anyFiltersActive);
+  }
 }
 
 /**

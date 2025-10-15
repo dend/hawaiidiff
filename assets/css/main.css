@@ -360,6 +360,14 @@ main {
   grid-template-columns: repeat(auto-fit, minmax(320px, 320px));
   gap: 24px;
   justify-content: center;
+  width: 100%;
+  max-width: 1696px; /* 5 cards */
+  margin: 0 auto; /* center the grid container within page */
+}
+
+/* When any filters are active, align cards to the left */
+.camera-grid.is-filtered {
+  justify-content: start;
 }
 
 /* Mobile: smaller gap */
@@ -367,6 +375,29 @@ main {
   .camera-grid {
     gap: 16px;
   }
+}
+
+/* Match grid width to filter-panel at breakpoints */
+@media (max-width: 1750px) {
+  .camera-grid { max-width: 1352px; } /* 4 cards */
+}
+
+@media (max-width: 1406px) {
+  .camera-grid { max-width: 1008px; } /* 3 cards */
+}
+
+@media (max-width: 1062px) {
+  .camera-grid { max-width: 664px; } /* 2 cards w/24px gap */
+}
+
+/* 2 cards w/16px gap on small screens; account for container padding with center */
+@media (max-width: 767px) and (min-width: 696px) {
+  .camera-grid { max-width: 656px; }
+}
+
+/* 1 card */
+@media (max-width: 695px) {
+  .camera-grid { max-width: 320px; }
 }
 
 /* Camera Card Styling */
@@ -1068,7 +1099,7 @@ main {
 /* Search Input */
 .filter-search {
   width: 100%;
-  max-width: 500px;
+  max-width: 100%;
   padding: 0.75rem 1rem;
   background: var(--bg-primary);
   border: 1px solid var(--border);
@@ -1160,14 +1191,11 @@ main {
   border-color: var(--accent);
 }
 
-/* Chevron icon indicates expand/collapse state */
-.filter-toggle .icon-chevron {
-  transition: transform 0.2s ease;
-}
-
-.filter-toggle[aria-expanded="true"] .icon-chevron {
-  transform: rotate(180deg);
-}
+/* Chevron icons: swap without animation */
+.filter-toggle .chevron { display: inline-block; }
+.filter-toggle .chevron-up { display: none; }
+.filter-toggle[aria-expanded="true"] .chevron-down { display: none; }
+.filter-toggle[aria-expanded="true"] .chevron-up { display: inline-block; }
 
 /* No Results Message */
 .no-results {
