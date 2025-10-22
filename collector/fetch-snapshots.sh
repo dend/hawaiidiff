@@ -12,7 +12,8 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 CAMERAS_JSON="$ROOT_DIR/data/cameras.json"
-IMAGES_DIR="$ROOT_DIR/static/images"
+ARCHIVE_DIR="$ROOT_DIR/archive"              # Source of truth - all images
+STATIC_IMAGES_DIR="$ROOT_DIR/static/images"  # Hugo build - only last 11 images
 WEBP_QUALITY=80
 MAX_SNAPSHOTS=11
 
@@ -27,8 +28,9 @@ if [ ! -f "$CAMERAS_JSON" ]; then
     exit 1
 fi
 
-# Create images directory if it doesn't exist
-mkdir -p "$IMAGES_DIR"
+# Create directories if they don't exist
+mkdir -p "$ARCHIVE_DIR"
+mkdir -p "$STATIC_IMAGES_DIR"
 
 # Get current timestamp for filename (always in Pacific Time)
 TIMESTAMP=$(TZ="America/Los_Angeles" date +"%Y_%m_%d_%H_%M")
@@ -50,13 +52,15 @@ jq -c '.cameras[]' "$CAMERAS_JSON" | while read -r camera; do
     
     echo "Processing: $CAMERA_NAME ($CAMERA_ID)"
     
-    # Create camera directory
-    CAMERA_DIR="$IMAGES_DIR/$CAMERA_ID"
-    mkdir -p "$CAMERA_DIR"
+    # Create camera directories in both locations
+    ARCHIVE_CAMERA_DIR="$ARCHIVE_DIR/$CAMERA_ID"
+    STATIC_CAMERA_DIR="$STATIC_IMAGES_DIR/$CAMERA_ID"
+    mkdir -p "$ARCHIVE_CAMERA_DIR"
+    mkdir -p "$STATIC_CAMERA_DIR"
     
     # Temporary file for download
-    TMP_FILE="$CAMERA_DIR/tmp_download"
-    WEBP_FILE="$CAMERA_DIR/${TIMESTAMP}.webp"
+    TMP_FILE="$ARCHIVE_CAMERA_DIR/tmp_download"
+    WEBP_FILE="$ARCHIVE_CAMERA_DIR/${TIMESTAMP}.webp"
     
     # Download image
     echo "  Downloading from $CAMERA_URI"
@@ -65,10 +69,23 @@ jq -c '.cameras[]' "$CAMERAS_JSON" | while read -r camera; do
         echo "  Converting to WebP (quality: $WEBP_QUALITY)"
         if cwebp -q $WEBP_QUALITY "$TMP_FILE" -o "$WEBP_FILE" >/dev/null 2>&1; then
             FILE_SIZE=$(du -h "$WEBP_FILE" | cut -f1)
-            echo "  ✓ Saved: ${TIMESTAMP}.webp ($FILE_SIZE)"
+            echo "  ✓ Saved to archive: ${TIMESTAMP}.webp ($FILE_SIZE)"
             
             # Clean up temporary file
             rm -f "$TMP_FILE"
+            
+            # Sync last 11 images to static/images for Hugo build
+            echo "  Syncing last $MAX_SNAPSHOTS images to static/images..."
+            
+            # Clear static/images directory for this camera
+            rm -f "$STATIC_CAMERA_DIR"/*.webp 2>/dev/null || true
+            
+            # Copy exactly the last 11 images from archive (newest first)
+            ls -t "$ARCHIVE_CAMERA_DIR"/*.webp 2>/dev/null | head -n $MAX_SNAPSHOTS | while read -r img; do
+                cp "$img" "$STATIC_CAMERA_DIR/"
+            done
+            
+            echo "  ✓ Updated static/images with last $MAX_SNAPSHOTS snapshots"
         else
             echo "  ✗ Error: WebP conversion failed"
             rm -f "$TMP_FILE"

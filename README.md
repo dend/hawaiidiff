@@ -103,6 +103,10 @@ hawaiidiff/
 │   └── cameras/         # Camera markdown files (generated)
 ├── data/
 │   └── cameras.json     # Camera configuration
+├── archive/             # Source of truth - ALL camera snapshots (archived)
+│   ├── cfht-c3/
+│   ├── cfht-c4/
+│   └── ...
 ├── layouts/
 │   ├── index.html       # Homepage template
 │   ├── cameras/
@@ -112,7 +116,7 @@ hawaiidiff/
 │   └── partials/        # Reusable components
 ├── static/
 │   ├── favicon/         # Site favicons
-│   └── images/          # Snapshot storage (organized by camera ID)
+│   └── images/          # Hugo build - LAST 11 snapshots only (per camera)
 ├── hugo.toml            # Hugo configuration
 └── README.md
 ```
@@ -121,7 +125,10 @@ hawaiidiff/
 
 1. **Snapshot Collection**: GitHub Actions runs `fetch-snapshots.sh` every 20 minutes
 2. **Image Processing**: Downloaded images are converted to WebP format
-3. **Storage**: Images are saved to `static/images/{camera-id}/` with timestamp filenames
+3. **Storage Strategy**: 
+   - All images saved to `archive/{camera-id}/` (source of truth, full archive)
+   - Last 11 images copied to `static/images/{camera-id}/` (for Hugo build only)
+   - This prevents Cloudflare Pages build limits by keeping the build directory small
 4. **Site Generation**: Hugo generates static pages with camera grids and detail views
 5. **JavaScript Enhancement**: Client-side JS parses timestamps and formats display times
 

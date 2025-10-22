@@ -66,7 +66,10 @@ The complete set of all cameras in the system.
 
 Represents a single captured image from a camera at a specific point in time.
 
-**Storage**: File system at `data/images/{camera-id}/{timestamp}.webp`
+**Storage Strategy**: 
+- **Source of truth**: `data/images/{camera-id}/{timestamp}.webp` - All images archived here
+- **Hugo build**: `static/images/{camera-id}/{timestamp}.webp` - Last 11 images only (copied from data/images)
+- This dual-storage approach prevents Cloudflare Pages build limits
 
 **Attributes** (derived from filename and file metadata):
 
@@ -80,15 +83,18 @@ Represents a single captured image from a camera at a specific point in time.
 **Filename Convention**: `YYYY_MM_DD_HH_MM.webp`
 
 **Example**: 
-- File: `data/images/camera-001/2025_10_11_14_20.webp`
+- File: `data/images/camera-001/2025_10_11_14_20.webp` (source of truth)
+- Build: `static/images/camera-001/2025_10_11_14_20.webp` (if in last 11)
 - Parsed timestamp: October 11, 2025, 14:20
 - Camera ID: camera-001
 
-**Retention**: Maximum 10 snapshots per camera (oldest deleted automatically by fetch script)
+**Retention**: 
+- `data/images`: All snapshots retained indefinitely
+- `static/images`: Only last 11 snapshots per camera (for Hugo build)
 
 **Relationships**:
 - Each Snapshot belongs to exactly one Camera (via camera_id)
-- Each Camera has 0-10 Snapshots (historical snapshots)
+- Each Camera has 0-11 Snapshots in static/images (for site display)
 
 ## Data Relationships
 
@@ -97,31 +103,34 @@ CameraCollection
     │
     └─▷ contains 34 Camera objects
             │
-            └─▷ has 0-10 Snapshot files
+            └─▷ has 0-11 Snapshot files (in static/images for builds)
+            └─▷ has all Snapshot files (in data/images archive)
 ```
 
 **Cardinality**:
 - CameraCollection : Camera = 1 : 34 (fixed)
-- Camera : Snapshot = 1 : 0..10 (variable, up to 10)
+- Camera : Snapshot = 1 : 0..∞ (unlimited in data/images)
+- Camera : Snapshot (build) = 1 : 0..11 (limited in static/images)
 
 ## Data Flow
 
 ### Collection Phase (GitHub Actions every 20 minutes)
 
-1. Read `collector/cameras.json`
+1. Read `data/cameras.json`
 2. For each camera:
    - Fetch image from camera.uri
    - Convert to WebP format
-   - Save as `data/images/{camera.id}/{timestamp}.webp`
-   - Delete oldest snapshots if count > 10
+   - Save as `data/images/{camera.id}/{timestamp}.webp` (source of truth)
+   - Copy last 11 images to `static/images/{camera.id}/` (for Hugo build)
+   - Remove old files from static/images if count > 11
 
 ### Build Phase (Hugo site generation)
 
-1. Hugo reads `collector/cameras.json` as data file
+1. Hugo reads `data/cameras.json` as data file
 2. For each camera, Hugo:
-   - Creates landing page card with latest snapshot
+   - Creates landing page card with latest snapshot from `static/images`
    - Generates camera detail page at `/cameras/{camera-id}/`
-   - Lists all snapshots from `data/images/{camera-id}/`
+   - Lists snapshots from `static/images/{camera-id}/` (last 11 only)
    - Sorts snapshots by filename (chronological order)
 
 ### Render Phase (Browser)

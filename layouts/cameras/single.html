@@ -126,7 +126,7 @@
         <section class="snapshot-history-section">
             <div class="section-header">
                 <h2 class="section-title">Previous Snapshots</h2>
-                <a href="https://github.com/dend/hawaiidiff/tree/main/static/images/{{ $cameraId }}" 
+                <a href="https://github.com/dend/hawaiidiff/tree/main/archive/{{ $cameraId }}" 
                    target="_blank" 
                    rel="noopener noreferrer"
                    class="view-history-button"
@@ -140,7 +140,7 @@
             {{ if gt (len $historicalSnapshots) 0 }}
                 <div class="snapshot-history">
                     {{ range $historicalSnapshots }}
-                        <a href="https://github.com/dend/hawaiidiff/blob/main/static/images/{{ $cameraId }}/{{ .Name }}" 
+                        <a href="https://github.com/dend/hawaiidiff/blob/main/archive/{{ $cameraId }}/{{ .Name }}" 
                            target="_blank" 
                            rel="noopener noreferrer"
                            class="snapshot-thumbnail-link"

@@ -7,19 +7,19 @@
 
 ## Summary
 
-Build a static website using Hugo to visualize camera snapshots from 34 Mauna Kea cameras. The site displays all cameras on a landing page with uniform square cards showing camera name, direction, and latest snapshot timestamp. Users can click any card to view camera details with the latest snapshot and up to 10 historical images. A GitHub Actions workflow runs every 20 minutes to download snapshots from camera URIs defined in cameras.json, convert them to WebP format, and store them in the data/images directory organized by camera ID and timestamp. Hugo builds the static site from this data using custom HTML/CSS/JavaScript templates with no external dependencies.
+Build a static website using Hugo to visualize camera snapshots from 34 Mauna Kea cameras. The site displays all cameras on a landing page with uniform square cards showing camera name, direction, and latest snapshot timestamp. Users can click any card to view camera details with the latest snapshot and up to 11 historical images. A GitHub Actions workflow runs every 20 minutes to download snapshots from camera URIs defined in cameras.json, convert them to WebP format, and store them in data/images (source of truth). The last 11 images per camera are copied to static/images for Hugo builds, preventing Cloudflare Pages build limits. Hugo builds the static site from static/images using custom HTML/CSS/JavaScript templates with no external dependencies.
 
 ## Technical Context
 
 **Language/Version**: Hugo static site generator (latest stable), Bash shell scripting, HTML5, CSS3, vanilla JavaScript (ES6+)  
 **Primary Dependencies**: Hugo (static site generator only), cwebp (for WebP conversion in bash script)  
-**Storage**: Local filesystem - cameras.json in collector/, images in data/images/, Hugo content in standard Hugo directories  
+**Storage**: Dual-layer filesystem - cameras.json in data/, all images in data/images/ (source of truth), last 11 images per camera in static/images/ (Hugo build)  
 **Testing**: Manual browser testing, Hugo server for local development  
 **Target Platform**: Modern web browsers (Chrome, Firefox, Safari, Edge) with CSS Grid and Flexbox support  
 **Project Type**: Single static website - Hugo-based with custom templates  
 **Performance Goals**: Landing page loads in under 3 seconds with all 34 camera cards visible  
-**Constraints**: No npm dependencies, no external JavaScript frameworks, build process must run offline, GitHub Actions for automated snapshot collection  
-**Scale/Scope**: 34 cameras, 10 historical snapshots per camera, images converted to WebP format, dark theme with WCAG AA accessibility
+**Constraints**: No npm dependencies, no external JavaScript frameworks, build process must run offline, GitHub Actions for automated snapshot collection, Cloudflare Pages build limits  
+**Scale/Scope**: 34 cameras, 11 historical snapshots per camera (in Hugo build), unlimited archive in data/images, images converted to WebP format, dark theme with WCAG AA accessibility
 
 ## Constitution Check
 

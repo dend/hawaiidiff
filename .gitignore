@@ -3,6 +3,10 @@
 /resources/_gen/
 .hugo_build.lock
 
+# Image Storage Strategy:
+# - archive/ = Source of truth (all images, tracked in git)
+# - static/images/ = Hugo build (last 11 images only, tracked in git)
+
 # OS-specific files
 .DS_Store
 Thumbs.db
