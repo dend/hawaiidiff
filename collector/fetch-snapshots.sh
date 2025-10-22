@@ -80,8 +80,8 @@ jq -c '.cameras[]' "$CAMERAS_JSON" | while read -r camera; do
             # Clear static/images directory for this camera
             rm -f "$STATIC_CAMERA_DIR"/*.webp 2>/dev/null || true
             
-            # Copy exactly the last 11 images from archive (newest first)
-            ls -t "$ARCHIVE_CAMERA_DIR"/*.webp 2>/dev/null | head -n $MAX_SNAPSHOTS | while read -r img; do
+            # Copy exactly the last 11 images from archive (sorted by filename/date, newest first)
+            ls -1 "$ARCHIVE_CAMERA_DIR"/*.webp 2>/dev/null | sort -r | head -n $MAX_SNAPSHOTS | while read -r img; do
                 cp "$img" "$STATIC_CAMERA_DIR/"
             done
             
