@@ -24,7 +24,7 @@ All images are aggregated from the [Maunakea Weather Center and Center for Mauna
 
 ## About the Site
 
-HawaiiDiff was created by [Den Delimarsky](https://den.dev) to make it easier to view and track changes in weather conditions and telescope operations at Mauna Kea.
+HawaiiDiff was created by [Den](https://den.dev) to make it easier to view and track changes in weather conditions and telescope operations at Mauna Kea.
 
 Snapshots are collected periodically and converted to WebP format for efficient delivery. The site maintains the current snapshot plus 10 historical snapshots for each camera.
 
