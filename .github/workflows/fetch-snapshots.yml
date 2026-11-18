@@ -11,6 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
+    concurrency:
+      group: fetch-snapshots
+      cancel-in-progress: false
     
     steps:
       - name: Checkout repository
@@ -28,16 +32,15 @@ jobs:
           cd collector
           ./fetch-snapshots.sh
           
-      - name: Check for changes
-        id: check_changes
+      # Signed commit through the API, merged through a PR (required by the branch rulesets).
+      # The helper exits without a commit when nothing is staged.
+      - name: Commit snapshots
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
         run: |
           git add archive/ static/images/
-          git diff --cached --quiet || echo "changes=true" >> $GITHUB_OUTPUT
-          
-      - name: Commit and push if changes
-        if: steps.check_changes.outputs.changes == 'true'
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "actions@github.com"
-          git commit -m "Update camera snapshots - $(date -u '+%Y-%m-%d %H:%M UTC')"
-          git push
+          bash .github/scripts/commit-signed.sh \
+            "bot/snapshots-${{ github.run_id }}-${{ github.run_attempt }}" \
+            "Update camera snapshots - $(date -u '+%Y-%m-%d %H:%M UTC')" \
+            main
