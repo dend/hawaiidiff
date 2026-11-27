@@ -20,13 +20,15 @@ cd "$(git rev-parse --show-toplevel)"
 if git diff --cached --quiet; then echo "No staged changes."; exit 0; fi
 
 local_head=$(git rev-parse HEAD)
-head=$(gh api "repos/$repo/git/ref/heads/$branch" --jq .object.sha 2>/dev/null || true)
-if [[ -z $head ]]; then
+# Test the exit status, not the output: on a 404, gh api prints the error body to stdout.
+if head=$(gh api "repos/$repo/git/ref/heads/$branch" --jq .object.sha 2>/dev/null); then
+  if [[ $head != "$local_head" ]]; then
+    echo "Remote $branch is at $head, but local HEAD is $local_head. Pull first." >&2
+    exit 1
+  fi
+else
   gh api "repos/$repo/git/refs" -f ref="refs/heads/$branch" -f sha="$local_head" >/dev/null
   head=$local_head
-elif [[ $head != "$local_head" ]]; then
-  echo "Remote $branch is at $head, but local HEAD is $local_head. Pull first." >&2
-  exit 1
 fi
 
 work=$(mktemp -d)
